@@ -1,0 +1,27 @@
+\usepackage{framed}
+\usepackage{xcolor}
+\usepackage{marginnote}
+\usepackage{verbatim}
+
+\colorlet{shadecolor}{blue!10}
+
+\newenvironment{WARNING}
+  {\begin{shaded}\marginnote{\fbox{Icon}}}
+  {\end{shaded}}
+
+\newenvironment{TODO}
+  {\begin{shaded}\marginnote{\fbox{Icon}}}
+  {\end{shaded}}
+
+\newenvironment{CONSOLE}
+  {\verbatim}
+  {\endverbatim}
+
+\newenvironment{LUA}
+  {\verbatim}
+  {\endverbatim}
+
+\newenvironment{QUOTE}
+  {\begin{shaded}\marginnote{\fbox{Icon}}}
+  {\end{shaded}}
+

@@ -1,0 +1,34 @@
+\section{Installing Lua on Linux}
+
+Author: Alexander Gladysh
+\href{mailto:agladysh@gmail.com}{\texttt{agladysh@gmail.com}}
+
+\begin{WARNING}
+Stub article
+\end{WARNING}
+
+\subsection{Installing from source}
+
+You'll need \verb!libreadline!.
+
+\begin{CONSOLE}
+wget http://www.lua.org/ftp/lua--5.1.4.tar.gz
+tar -zxf lua--5.1.4.tar.gz
+cd lua--5.1.4.tar.gz
+make linux
+sudo make install
+\end{CONSOLE}
+
+\begin{TODO}Check that\end{TODO}
+
+\subsection{Ubuntu}
+
+To install Lua on Ubuntu:
+
+\begin{CONSOLE}
+sudo apt-get install lua
+\end{CONSOLE}
+
+\begin{TODO}Note about LuaRocks incompatibilities (if any).\end{TODO}
+
+\begin{TODO}Add more Linux flavors here.\end{TODO}
