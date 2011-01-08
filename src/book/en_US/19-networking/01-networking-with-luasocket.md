@@ -47,7 +47,7 @@ You can create servers by using `socket.bind`.
 
 Here is a graph about servers.
 
-![image](server-graph.jpg)
+![image](19-networking/01-server-graph.jpg)
 
 ### Concurrency
 
