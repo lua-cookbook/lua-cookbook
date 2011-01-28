@@ -1027,7 +1027,7 @@ applications in this way.
 
 Lua is in fact compiled before it executes, although commonly the generated
 'bytecode' is not saved, since the compiler is so fast as to be practically
-instantaneous on everything except the largest program. This means that syntax
+instantaneous on everything except the largest programs. This means that syntax
 errors (like forgetting to say `then` after `if`) will be caught immediately.
 
 However, these are easy errors to avoid and you will find yourself making fewer
@@ -1123,7 +1123,7 @@ meaning to `k` outside the loop.
     end
 
 Good programming practice is to make everything as local as possible.  As a bonus,
-accessing locals is significantly faster than accessing globals.  Each global acess involves
+accessing locals is significantly faster than accessing globals.  Each global access involves
 a table lookup, whereas locals define 'slots' which are much more efficient.
 
 ### Modules
@@ -1248,11 +1248,11 @@ convenient for your purposes.
 You can add other directories to the Lua module path by setting the
 environment variable `LUA_PATH`. For a Bash shell on Unix this would look like:
 
-   export LUA_PATH=";;/home/steve/lualibs/?.lua"
+    export LUA_PATH=";;/home/steve/lualibs/?.lua"
 
 On Windows:
 
-   set LUA_PATH=;;c:\lua\lualibs\?.lua
+    set LUA_PATH=;;c:\lua\lualibs\?.lua
 
 Please note that the semi-colon is used to separate patterns on all systems. The double
 semicolon at the start means "append this to the existing Lua module path" so Lua will
@@ -1261,22 +1261,22 @@ first look in the system-wide directory for modules.
 So, there is nothing special about a Lua file loaded by `require`. Generally, it should
 create a table containing the functions. A common pattern looks like this:
 
-   -- mod3.lua
-   local mod3 = {}
+    -- mod3.lua
+    local mod3 = {}
 
-   function mod3.fun1()
-    return 42
-   end
+    function mod3.fun1()
+      return 42
+    end
 
-   function mod3.fun2()
-    return mod3.fun1()
-   end
+    function mod3.fun2()
+      return mod3.fun1()
+    end
 
-   return mod3
+    return mod3
 
 Note that it _returns the table_.  A user of the module may now say:
 
-   local mod3 = require 'mod3'
+    local mod3 = require 'mod3'
 
 This way of writing modules does not create a global table. Consider the effect of
 leaving out the `local` when declaring `mod3`: then the table _is_ available globally.
