@@ -388,7 +388,40 @@ Well, `arr[0]` will be 0, and `arr[9]` will be 9, as expected. But `#arr` will b
 And `table.sort` will only operate on indexes between 1 and 9.  (So yes, it is possible
 to arrange arrays from 0, but the standard table functions will not work as expected.)
 
-It is possible to compare tables for equality:
+Since holes are generally a bad idea, you must be careful not to insert any by 
+accident. Consider a task in which you want to get a list of objects from a list of
+names using a function `getObject` which may return `nil`.  You furthermore want
+the resulting list to have the same length as the list of strings:
+
+    local null = {}
+    local objects = {}
+    for i = 1,#strings do
+        local obj = getObject(strings[i])
+        if obj then
+            objects[i] = obj
+        else
+            objects[i] = null
+        end
+    end
+    
+That is, put some distinct and unique value into the array that stands for `nil`. Then
+when using the list of objects, test for this unique value:
+
+    for i = 1,#objects do
+        local obj = objects[i]
+        if obj == null then
+            print(i,'nada')
+        else
+            print(i,tostring(obj))
+        end
+    end
+    
+The list of objects remains a perfectly good array.
+    
+(In this code, variables are _explicitly_ declared as being local; we'll see why this is
+such a good idea later.)
+
+It is possible to compare tables for equality, as we did above:
 
     a1 = {10,20}
     a2 = {10,20}
@@ -412,7 +445,6 @@ Lua as 'the C of dynamic languages' - lean and mean. It gives you a powerful cor
 and you either build what you need, or reuse what others have provided, just as with
 C.  The whole purpose of the Lua cookbook is to provide good solutions so you do
 not have to reinvent the wheel.
-
 
 There is another use of Lua tables, constructing 'dictionaries' or 'maps'.  Generally a
 Lua table associates values called  'keys' with other values:
