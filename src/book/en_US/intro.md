@@ -473,14 +473,14 @@ standard function `io.write` writes out text without a line feed:
     function dumpline (t)
         for i = 1, #t do
             io.write( t [ i ] )
-            io.write( "," )
+            if i < #t then io.write( "," ) end
         end
         print()
     end
     
     dumpline({10,20,30})
     --->
-    10,20,30,
+    10,20,30
 
 True to its name, most of this Cookbook is dedicated to giving you functions to do
 useful things.
