@@ -9,9 +9,35 @@ closing quote on a string.  Such editors can also match up parentheses and brace
 They will often automatically _indent_ code for you, which is important for
 readability..
 
+It is better to lay out code like this:
+
+    for i = 1,10 do
+        if i < 5 then
+            print("lower",i)
+        else
+            print("upper",i)
+        end
+    end
+
+Than this:
+
+    for i = 1,10 do
+    if i < 5 then
+    print("lower",i) else
+    print("upper",i)
+    end
+    end
+
+The logical structure of the code is now harder to see. By making indenting a habit,
+you will write code that will be more readable to another person. (After several
+months, you will be that other person.)
+
 A good start is the Lua [wiki](http://lua-users.org/wiki/LuaEditorSupport). If you
 are on Windows, then the Lua for WIndows distribution comes with SciTE, which also
 has Lua debugging support.
+
+There are a number of useful places to find this extra functionality, such as the
+[lua-users](http://lua-users.org/wiki/) wiki.
 
 ## Basics
 
@@ -20,23 +46,48 @@ has Lua debugging support.
 It is traditional to start with "Hello, world". Like all scripting languages, this
 is straightforward:
 
-    print("Hello, world")
+    print("Hello world")
 
 An important point is that `print` is a function which takes a number of values and
 prints out these values to standard output. It is not a statement, as in Python 2.X
 or Basic.
 
+To run this example, save this line as 'hello.lua' and run from the command line:
+
+    $> lua hello.lua
+    Hello world!
+    
+(Or, use an editor that knows how to run Lua, like SciTE in Lua for Windows. The F5 key
+will run the current program.)
+
 Arithmetic expressions use standard programming notation:
 
-    print("result",2*3.5*(1 - 0.1)^2)
+    print("result",2 + 3 * 4 ^ 2)
 
 There is an exponentiation ('power of') operator `^`, unlike in C or Java.
 
-`x^y` can also be written explicitly as `math.pow(x,y)`. There are the usual
+The order of evaluation follows the usual rules, and you can use parentheses to group
+expressions - for example, `(1 + 2)*(3 + 4)`.  The original expression could be written like:
+
+    (2 + (3 * (4 ^ 2))
+    
+which makes the order obvious. When in doubt, use parentheses, but knowing when you
+have to use them is an important part of learning a programming language.
+
+Operations like `+` and `*` are called _operators_, and the values they operate on are 
+called _arguments_.  
+
+There is a remainder operator, `%` which gives the integer remainder from a divsion:
+
+    print(1 % 2) --> 1
+    print(2 % 2)  --> 0
+    print(3 % 2) --> 1
+
+ There are the usual
 standard mathematical functions available in the `math` namespace (or _table_) like
 `math.sin`, `math.sqrt`,etc. The useful constant `math.pi` is also available.
 
-    print('sin',math.sin(0.5*math.pi),'cos',math.cos(0.5*math.pi))
+    print('sin', math.sin(0.5*math.pi), 'cos', math.cos(0.5*math.pi))
 
 This is more readable when spread over two lines using a _variable_ `x`:
 
@@ -46,49 +97,74 @@ This is more readable when spread over two lines using a _variable_ `x`:
 Of course, you could say that `x` is not a variable, but Lua does not make any such
 distinction.
 
+Even if the command-line is not your strong point, I recommend learning Lua interactively.
+
+    $> lua
+    Lua 5.1.4  Copyright (C) 1994-2008 Lua.org, PUC-Rio
+    > print(10 + 20)
+    30
+    > = 10 + 20
+    30
+    > = math.sin(2.3)
+    0.74570521217672
+    > p = math.pi
+    > = math.cos(p)
+    -1
+    
+Starting a line with `=` is a shortcut for `print()`.  Interactive Lua is a very
+useful scientific calculator !
+
+With Lua for Windows, it is not even necessary to open a command prompt. On the
+SciTE toolbar, there is a prompt icon with the tooltip 'Launch Interactive Lua'. It will open
+an interactive session in the output pane, and you can evaluate Lua statements. As with
+a console prompt, the up and down arrows can be used to select and re-evaluate
+previous statements.
+    
+
 ### Variables and Assignment
 
-Lua variables may have letters, digits and underscores ('_'). They may refer to any
-Lua type:
+Lua variables may have letters, digits and underscores ('_'), but they cannot start with
+a digit. So `check_number`, `checkNumber`, and `catch21` are fine, but `21catch`
+is not. There is no limit to the length of variable names, except the patience of you
+and your readers.
+
+They may contain any Lua type:
 
     x = "hello"
     x = 1
     x = x + 1
 
 Here, the value of `x` becomes "hello", and then it becomes 1, and finally 2 (which
-is the value of `x + 1`).  Variables have no fixed type, but always contain a
-definite type of value, even if it is just `nil`.
+is the value of `x + 1`).  This process is commonly called _assignment_.
+
+Variables have no fixed type, but always contain a definite type of value,
+even if it is just `nil`.
 
 Assigning multiple variables works like this:
 
-    x,y = 1,2
+    x, y = 1, 2
 
-This sets `x` to 1 and `y` to 2. This is different from the usual `x=1,y=2` style in
+This sets `x` to 1 and `y` to 2. This is different from the usual `x=1, y=2` style in
 other languages. It is possible to swap the values of two variables in one line:
 
-    x,y = y,x
+    x, y = y, x
+    
+The _assignment_ statement `x = 1` is not an expression - it does not return a value.
 
-### Functions
-
-It is straightforward to create your own functions. Here is a sine function which
-works in degrees, not radians.
-
-    function sin(x)
-        return math.sin(math.pi*x/180.0)
-    end
-
-That is, after the keyword `function` there is the function name, an _argument list_
-and a group of statements ending with `end`. The keyword `return` takes an
-expression and makes it the value returned by the function.
-
-### Simple Loops
+### Numeric `for` loops
 
 Programming is more than calculation. The simplest way to do something a number of
-times is the _numerical for_ statement:
+times is the _numeric for_ statement:
 
-    for i = 1,5 do
+    for i = 1, 5 do
         print("hello",i)
     end
+    -->
+    hello   1
+    hello   2
+    hello   3
+    hello   4
+    hello   5
 
 Any statements in the _block_ from `do` to `end` are repeated with different values
 of the variable `i`.
@@ -96,11 +172,11 @@ of the variable `i`.
 Spacing and line ends (often called 'whitespace') is usually not important. This
 code could also be written like so:
 
-    for i = 1,5 do print("hello",i) end
+    for i = 1, 5 do print("hello", i) end
 
 or
 
-    for i = 1,5
+    for i = 1, 5
     do
     print("hello",i)
     end
@@ -108,12 +184,16 @@ or
 However, the last example would be considered bad style. The logic of a program is
 much easier to follow if statements are laid out at the right columns.
 
-The `for` statement loops from a start to a final value, inclusive. There can be a
-third number, which is the 'step' used in calculating the next value. So to print a
-little table of sine values from 0 to &pi; with steps of 0.1 is simple:
+The numeric `for` statement loops from a start to a final value, inclusive. There can be a
+third number, which is the 'step' used in calculating the next value.  To print the 
+greetings out backwards:
 
-    for x = 0,math.pi,0.1 do
-        print(x,math.sin(x))
+    for i = 5, 1, -1 do print("hello",  i) end
+
+So to print a little table of sine values from 0 to &pi; with steps of 0.1:
+
+    for x = 0, math.pi, 0.1 do
+        print(x, math.sin(x))
     end
 
 There is something you need to know about `for` variables; they only exist inside
@@ -131,7 +211,7 @@ Programs often have to make choices.
 
     age = 40
     if age > 30 then
-        print("too old to play games!")
+       print("too old to play games!")
     end
 
 (Well, that's rude, but computers often are. You can't please everyone.)
@@ -139,12 +219,34 @@ Programs often have to make choices.
 The expression in the `if` statement is called a _condition_. For intance,
 `10 == 10` is always `true`; `2 >= 3` (meaning 'greater or equal') is always `false`.
 
-Like Python and the C-like langauges `==` is used for 'is equal', since a single `=`
+Like Python and the C-like languages `==` is used for 'is equal', since a single `=`
 has a very different meaning. Unlike them, 'not equal' is `~=` (the tilde `~` is
 usually the key on the far left side, next to `!`)
 
-`if-else` statements can be combined together: note that it is the single word
-`elseif` rather than the two words `else if`.
+It is common to have two different actions based on the condition:
+
+    if age > 30 then
+        print("still too old")
+    else
+        print("hello, kiddy!")
+    end
+    
+And there may be multiple choices:
+
+    age = 18
+    if age == 18 then
+        print("just right")
+    else
+        if age > 30 then
+            print("too old")
+        else
+            print("too young")
+        end        
+    end
+    
+This style gets irritating fast, if there is more than two conditions.
+`if-else` statements can be combined together using the single word
+`elseif` (not the two words `else if`!)
 
     age = 18
     if age == 18 then
@@ -163,13 +265,22 @@ In this expression, `>` and `==` evaluate first, followed by `and`, and then `or
 So the explicit form would be:
 
     ((a > 0) and (b > 0)) or ((a == 0) and (b < 0))
+    
+The `not` operator turns `true` into `false`, and vice versa. Instead of saying `age > 30` 
+you can say `not(age <= 30)`. The parenthesis is needed here because `not` has a 
+higher precedence than `<=`; in fact it has the highest precedence of the logical
+operators.
 
-Lua will 'short-circuit' logical expressions, For example, `n > 0` here will give an
-error if `n` is not a number:
+Lua will 'short-circuit' logical expressions, For example, 
 
     if type(n) == 'number' and n > 0 then .... end
+    
+`n > 0` will give an error if `n` is not a number, but Lua knows that if the first argument
+of `and` is `false`, then there is no point in evaluating the second argument. 
 
-But Lua will not bother to evaluate `n > 0` in that case.
+In general,
+if a condition is `f() and g()`, then if the result of calling `f` is `false` there is no need to
+call `g`. Simularly, in `f() or g()` Lua will not call `g` if `f` returns `true`.
 
 `if` statements can be used inside the `for` statement:
 
@@ -181,31 +292,32 @@ But Lua will not bother to evaluate `n > 0` in that case.
         end
     end
 
-Now, just to make a point, here is that code again:
 
-    for i = 1,10 do
-    if i < 5 then
-    print("lower",i) else
-    print("upper",i)
-    end
-    end
-
-The logical structure of the code is now harder to see. By making indenting a habit,
-you will write code that will be more readable to another person. (After several
-months, you will be that other person.)
-
-
-### Loops with Conditions
+### Conditional Loops
 
 This produces the same output as the simple `for` statement example:
 
     i = 1
-    while i < 10 do
+    while i < 5 do
         print("hello",i)
         i = i + 1
     end
+    
+The body of the `while` loop is repeatedly executed _while_ a condition is true; 
+each time one is added to the variable `i` , until it becomes 6, and the condition fails.
 
-### Arrays
+The other loop statement is `repeat`, where we loop _until_ a value is true.
+
+    i = 1
+    repeat
+        print("hello",i)
+        i = i + 1
+    until i > 5
+
+
+### Tables
+
+Often we need to store a number of values in order, usually called arrays or lists.
 
 Arrays in Lua are done using _tables_, which is a very general data structure. A
 simple array is easy to define:
@@ -215,61 +327,91 @@ simple array is easy to define:
 and then the first element will be `arr[1]`, etc; the length of the array is `#arr`.
 So to print out this array:
 
-    for i = 1,#arr do print(arr[i]) end
+    for i = 1, #arr do print(arr[i]) end
 
-(Yes, arrays start with index 1; it's best to accept this and learn to live with the
-fact.)
+Arrays start with index 1; it's best to accept this and learn to live with the
+fact. 
 
 These arrays are resizable; we can add new elements:
 
-    arr[#arr+1] = 50
+    arr[#arr + 1] = 50
 
 and insert elements at some position using the standard function `table.insert`; the
 second argument is the index _before_ where the value is inserted.
 
-    table.insert(arr,1,5)
+    table.insert(arr, 1, 5)
 
 After these two operations the array now looks like `{5,10,20,30,50,50}`.
+
+Arrays can be constructed efficiently using a for-loop. This creates an array containing
+the squares of the first ten integers:
+
+    arr = {}  -- an empty table
+    for i = 1, 10 do
+        arr[i] = i ^ 2
+    end
+    
+Please notice that it is not necessary to specify the size of the array up front; a table
+will automatically increase in size.
 
 To complete the picture, there is `table.remove` which removes a value at a given
 index.
 
-What about trying to access an array element that does not exist, e.g. `arr[20]`? It
-will not raise an error, but return the value `nil`.  So it is wise to carefully
-check what is returned from an arbitrary array access.  Since `nil` always indicates
-'not found', it follows that you should not put `nil` into an array.
+The function `table.sort` will sort an array of numbers in ascending order.
 
-Consider this:
+Lua tables can contain any valid Lua value:
+
+    t = {10,'hello',{1,2}}
+
+So `t[1]` is a number, `t[2]` is a string, and `t[3]` is itself another table. (But do not
+expect `table.sort` to know what to do with `t` !)
+
+What about trying to access an element that does not exist, e.g. `arr[20]`? It
+will not raise an error, but return the value `nil`.  So it is wise to carefully
+check what is returned from an arbitrary tab;e access.  Since `nil` always indicates
+'not found', it follows that you should not put `nil` into an array.  Consider:
+
+    arr = {1,2,nil,3,4}
+    
+What is `#arr`? It may be 2, but it will definitely not be 5 !
+
+The same caution applies to creating arrays that start at 0.
+
+    arr = {}
+    for i = 0,9 do arr[i] = i end
+
+Well, `arr[0]` will be 0, and `arr[9]` will be 9, as expected. But `#arr` will be 9, not 10.
+And `table.sort` will only operate on indices between 1 and 9.  (So yes, it is possible
+to arrange arrays from 0, but the standard table functions will not work as expected.)
+
+It is possible to compare tables for equality:
 
     a1 = {10,20}
     a2 = {10,20}
-    print(a1 == a2)
+    print(a1 == a2) --> false !
 
 The result is `false` because `a1` and `a2` are different _objects_. Table
 comparison does not compare the elements, it just checks whether the arguments are
 in fact the same tables.
 
+    a1 = {10,20}
+    a2 = a1
+    print(a1 == a2) --> true !
+    a1[2] = 2
+    print(a2[2]) --> 2
+    
+`a1` and `a2` are merely names for the same thing - `a2` is just an _alias_ for `a1`.  
+
 Newcomers to Lua are often surprised by the lack of 'obvious' functionality, like
 how to compare arrays 'properly' or how to print out an array. It helps to think of
 Lua as 'the C of dynamic languages' - lean and mean. It gives you a powerful core
 and you either build what you need, or reuse what others have provided, just as with
-C.
+C.  The whole purpose of the Lua cookbook is to provide good solutions so you do
+not have to reinvent the wheel.
 
-There are a number of useful places to find this extra functionality, such as the
-[lua-users](http://lua-users.org/wiki/) wiki. And the whole purpose of the Lua
-cookbook is to provide good solutions so you do not have to reinvent the wheel.
 
-Lua arrays (like their Python counterpart, lists) can contain any valid Lua value:
-
-    t = {10,'hello',{1,2}}
-
-So `t[1]` is a number, `t[2]` is a string, and `t[3]` is itself another array.
-
-### Maps (associative arrays)
-
-The term 'map' means a data structure which looks up a 'key' and returns its
-associated value; it is often called a 'hash' or a 'dictionary'. Maps in Lua are
-declared almost the same way as arrays:
+There is another use of Lua tables, constructing 'dictionaries' or 'maps'.  Generally a
+Lua table associates values called  'keys' with other values:
 
     M = {one=1,two=2,three=3}
 
@@ -277,29 +419,78 @@ declared almost the same way as arrays:
 
     print(M['one'],M['two'],M['three'])
     --> 1   2   3
+   
+An unknown key always maps to `nil`, without causing an error.
 
-As with arrays, an unknown key always returns `nil`. (Unlike Python or Java, where
-an unknown key will cause an error.)
+To iterate over all the keys and values requires the generic `for` loop:
 
-To iterate over all the keys and values requires a different `for` loop syntax:
-
-    for key,value in pairs(M) do print(key,value) end
+    for key, value in pairs(M) do print(key, value) end
     --> one     1
     --> three   3
     --> two     2
 
 The `pairs` function creates an _iterator_ over the map key/value pairs which the
-`for in` statement goes through.
+generic `for` loops over.
 
 This example illustrates an important point; the _actual_ order of iteration is not
 the _original_ order.  (In fact the original order is lost, and extra information
 needs to be stored if you want the keys in a particular order.)
 
-In Lua, `M.one` is _exactly_ the same as `M['one']`.
 
-## Types of Value
+### Functions
 
-The standard function `type` returns the type of any Lua value...
+It is straightforward to create your own functions. Here is a sine function which
+works in degrees, not radians, using the standard function `math.rad` for converting
+degrees to radians:
+
+    function sin(x)
+        return math.sin(math.rad(x))
+    end
+
+That is, after the keyword `function` there is the function name, an _argument list_
+and a group of statements ending with `end`. The keyword `return` takes an
+expression and makes it the value returned by the function.
+
+Functions are the building blocks of programs; any programmer collects useful functions
+like cooks collect tasty recipes.  Lua does not provide a standard function to print
+out arrays, but it is easy to write one:
+
+    function dump(t)
+        for i = 1, #t do
+            print( t[ i ] )
+        end
+    end
+    
+A function does not _have_ to return a value; in this case we are not interested in the 
+result, but the action.
+
+This `dump` is not so good for longer arrays, since each value is on its own line. The
+standard function `io.write` writes out text without a line feed:
+
+    function dumpline (t)
+        for i = 1, #t do
+            io.write( t [ i ] )
+            io.write( "," )
+        end
+        print()
+    end
+    
+    dumpline({10,20,30})
+    --->
+    10,20,30,
+
+True to its name, most of this Cookbook is dedicated to giving you functions to do
+useful things.
+
+## Types 
+
+The standard function `type` returns the type of any Lua value:
+
+    type("") == "string"
+    type(0) ==  "number"
+    type({})) == "table"
+    type(print) == "function"
+    type(nil) == "nil"
 
 ### `nil`
 
@@ -313,6 +504,19 @@ Otherwise, `nil` is special when used with tables; table elements cannot be `nil
 Be particularly careful when putting `nil` values into an array; these will become
 'holes' and the value of `#arr` will become invalid.
 
+### Booleans
+
+A boolean value is either `true` or `false`. The conditional operators, like `>`
+and `==` return this value. The standard boolean operators `and` and `or` will
+usually also return 'boolean'.
+
+Only `false` and `nil` make a condition fail.
+
+    a = 5
+    print(a > 4)  --> true
+    print(a == 4) --> false
+    print(a > 4 and a < 10) --> true
+
 ### Numbers
 
 Lua has only one type of number, which is usually double-precision floating-point on
@@ -325,7 +529,11 @@ There are two rounding functions, `math.floor` and `math.ceil`; so given 3.1, th
 first gives the integer part (3), and the second gives the first integer that is
 larger (4). `math.ceil(x)==x` is only true if `x` is an integer.
 
-Remember that 0 does not fail a condition, unlike C or Python.
+    function is_integer (x)
+        return math.ceil(x) == x
+    end
+
+0 does not fail a condition, unlike C or Python.
 
 ### Strings
 
@@ -359,13 +567,17 @@ How about converting numbers to strings? `tostring` does the general job of
 converting any Lua value into a string. (The `print` function calls `tostring` on
 its arguments.)  If you want more control, then use the `string.format` function:
 
-    string.format('%5.2f',math.pi) == ' 3.14'
+    string.format("%5.2f",math.pi) == '"3.14"
 
 These `%` format specifiers will be familiar to C and Python programmers, but basic
 usage is straightforward: the 'f' specifier has a total field with (5) and a number
 of decimal places (2) and gives fixed floating-point format; the 'e' specifier gives
 scientific notation. 's' is a string, 'd' is an integer, and 'x' is for outputing
 numbers in hex format.
+
+    print(string.format("The answer to the %s is %d", "universe", 42) )
+    -->
+    The answer to the universe is 42
 
 There is a set of standard operations on strings. We saw that 'adding' strings would
 try to treat them as numbers. To join strings together (_concatenate_) there is the
@@ -376,7 +588,8 @@ try to treat them as numbers. To join strings together (_concatenate_) there is 
 Most languages use `+` to mean this, so note the difference. Using a different
 operator makes it clear, for instance, that `1 .. 2` results in the _string_ '12'.
 
-As with arrays, `#s` is the length of the string `s`.
+As with arrays, `#s` is the length of the string `s`. (This is the number of _bytes_, not the
+number of characters.)
 
 The opposite operation is extracting substrings.
 
@@ -422,11 +635,9 @@ string pattern 'l+' means 'one or more' repetitions of 'l'.
     print(string.find('hello','l+'))
     --> 3       4
 
-[digits,letters,..captures? Need to keep this over...]
 
 'Character classes' make string patterns much more powerful. The pattern '[a-z]+'
 means 'one or more letter in the range 'a' to 'z':
-
 
     print(string.find('hello','[a-z]+'))
     --> 1       5
@@ -476,10 +687,10 @@ argument which lets you set the maximum number of substitutions:
 (There is no form that does a 'plain match' like `string.find` so you will have to
 be careful to escape magic characters.)
 
-
 ### Tables
 
-We have encountered tables used as arrays and as maps. The best way of seeing a Lua
+We have encountered tables used as arrays and as dictionaries.
+The best way of seeing a Lua
 table is that it is an associative array that can have any kind of key, including
 numbers. It is very efficient at _behaving_ like an array, that is, consecutive
 integer keys starting at one.
@@ -487,10 +698,29 @@ integer keys starting at one.
 Here is a more general table:
 
     T = {10,20,30,40,50; sorted=true}
+    print(t [1], #t, t [#t])  --> 10    5    50
+    print(t["sorted"],  t.sorted) --> true     true
 
-Here `T[i]` for `i` from 1 to 5 is the array (#T is 5, _not_ 6!) and `T['sorted']`
-is the map. So it is commonly said that a Lua table has both an array and a map part
-. It is more correct to say that it can be used both ways.
+It is commonly said that a Lua table has both an array and a map part.
+It is more correct to say that it can be used both ways.
+
+In Lua, `M.one` is _defined_ to be `M['one']`.  This gives us a way to do 
+'objects' or 'structures' with tables:
+
+    -- 'point' objects
+    s1 = {x = 1, y = 2}
+    s2 = {x = 0, y = 4}
+    -- adding two points
+    sum = { x = s1.x + s2.x, y = s1.y + s2.y }
+    print(sum.x, sum.y) --> 1    6
+    
+Something like `t.function` is a syntax error, because `function` is a keyword. In this case
+you must say `t["function"]`. The general way to construct such table is 
+
+    t = {
+      ["function"] = 1,
+      ["end"] = 2
+    }
 
 Most of the `table` functions are meant to operate on arrays; you can sort them with
 `table.sort`. In the simple case the table must only contain numbers (or sortable
@@ -518,13 +748,14 @@ arrays:
     --> 3   30
 
 Unlike `pairs`, `ipairs` will give you the keys in the correct order, and it will
-only access the array part.
-
-(Notice that you can say `ipairs{...}`. There are two cases when Lua does not need
-extra parentheses when calling a function; if the function is being passed one
-argument and that argument is either a string or a table constructor.)
+only access the array elements.
 
 ### Functions
+
+You can say `ipairs{10,20}` and `print "hello"` in Lua. These are the two cases when
+Lua does not need parentheses when calling a function;
+if the function is being passed one argument and that argument is either a string 
+or a table constructor.
 
 A Lua function is also a value; you can assign it to a variable, pass it to another
 function.
@@ -537,16 +768,16 @@ This can be sorted using `table.sort` with a custom sort function:
 
     table.sort(T,function(x,y) return x.a < y.a end)
 
-This is called an 'anonymous function', since it has not been given a name. Although
-in a real sense, all Lua functions are anonymous.
+This is called an 'anonymous function', since it has not been given a name.
 
+In a real sense, all Lua functions are anonymous. 
 The usual definition of a function:
 
     function answer()
         return 42
     end
 
-is exactly equivalent to this assignment:
+is _exactly_ equivalent to this assignment:
 
     answer = function()
         return 42
@@ -554,7 +785,6 @@ is exactly equivalent to this assignment:
 
 This is a useful way to look at Lua programs, since then it's clear that _executing_
 the function definition makes the function available. Consider this Lua file:
-
 
     -- main.lua
     main()
@@ -564,8 +794,33 @@ the function definition makes the function available. Consider this Lua file:
     end
 
 It will crash, complaining that it is trying to call a `nil` value. The variable
-`main` has not been defined yet, which is easy to see if you write the function
-definition as `main = function()...`.
+`main` has not been assigned yet, which is easy to see if you write the program like
+this:
+
+    main()
+
+    main = function()
+        print ('hello, world')
+    end
+    
+It is common to put functions in tables:
+
+    mod = {
+        start = function() print "start" end,
+        finish = function() print "finish" end
+    }
+    mod.start() --> start
+    mod.finish() --> finish
+    
+So tables are used to implement what other languages call 'namespaces' or 'classes'
+
+This style is common enough that Lua provides a little bit of help:
+
+    mod = {}
+    function mod.start() .. end
+    function mod.finish() .. end
+    
+That is, `function t.f().. end` is the same as `t.f = function() .. end`.
 
 A very interesting feature of Lua functions is that they may return _multiple values_:
 
@@ -574,11 +829,15 @@ A very interesting feature of Lua functions is that they may return _multiple va
     end
 
     name,age = multiple()
+    
+This is useful because Lua functions can very
+efficiently return a set of values without having to pack them into a table.    
 
-If know Python, then you may think that `multiple` returns a 'tuple', which the
+@tip python [
+If you know Python, then you may think that `multiple` returns a 'tuple', which the
 assignment then helpfully unpacks, but the reality is simpler and weirder: this
-function genuinely returns two values. This is useful because Lua functions can very
-efficiently return a set of values without having to pack them into a table.
+function genuinely returns two values. 
+]
 
 Multiple return values are handled specially if they are returned by the _last_
 expression in a function argument list or table constructor:
@@ -624,9 +883,7 @@ really a most interesting result.  How does function `a` remember that `x` was 1
 The answer is that every time `adder` is called, it makes a new function. And that
 new function contains its own hidden variable that is initialized to the argument
 `x`.  This hidden variable is called an 'upvalue' and the resulting function called
-a 'closure'. It might seem that creating new functions is expensive, but this is not
-so; all these new functions share the same bytecode but have their own separate
-upvalues.
+a 'closure'. 
 
 Here is another example of a closure - a 'function with memory'
 
@@ -638,26 +895,59 @@ Here is another example of a closure - a 'function with memory'
         end
     end
 
-    c = counter()
-    for i = 1,5 do
-        print(c())
-    end
+    c1 = counter()
+    c2 = counter()
+    print(c1()) -- 1
+    print(c2()) --1
+    print(c1()) --2
+    print(c1()) --3
+    print(c2()) --2
 
 We could use `counter` to create lots of these functions, and they would all have
 their copy of `count`.  (Note that it is important that `count` was a local variable
 inside `counter`, because otherwise it would have just been a global reference
 shared by all the functions.)
 
-The function `pairs` is said to return an iterator. What animal is this? In its
-simpler form, an iterator is just a function of no arguments which returns different
-values each time, exactly like these counter functions. Usually, iterators know when
-to stop, which they do by returning `nil`.
+It might seem that creating new functions in this way is inefficient, but this is not
+so; all these new functions share the same bytecode but have their own separate
+upvalues.
+
+Although Lua has no concept of 'class', it is easy to construct objects with closures:
+
+    function Point (x,y)
+        local self = {}
+        
+        function self.getX()
+            return x
+        end
+        
+        function self.getY()
+            return y
+        end
+        
+        return self
+    end
+    
+    p = Point(10,20)
+    print(p.getX()) --> 10
+    print(p.getY()) --> 20
+    
+The returned table contains two closures - note that this is a perfectly encapsulated
+object; it is not possible to modify the value of `p`.
+
+The function `pairs` is said to return an iterator. What kind of animal is this? 
+
+In its simplest form, an iterator is just a function of no arguments which returns different
+values each time, exactly like the counter functions. Usually, iterators know when
+to stop, which they do by returning `nil`. `iter` returns a closure which has two upvalues, 
+the table `t` and the index `i`.
 
     function iter(t)
         local i = 0
         return function()
             i = i + 1
-            return t[i]
+            --> nil when i > #t - iteration stops!
+            return t[ i ]  
         end
     end
 
@@ -702,7 +992,8 @@ called, it resumes exactly at the point where it last yielded.
 
 The first `resume` call causes the first `yield` call (after printing 1) and we get
 the value that was passed to `yield`. The second `resume` call makes the `yield`
-return and we print out 2, etc.
+return and we print out 2, etc. The key idea is that the coroutine _remembers where
+it was_ and resumes where it last was executing.
 
 So each coroutine preserves its complete state, and is sleeping when not explicitly
 resumed. This is often called 'cooperative multitasking' because one coroutine has
@@ -713,9 +1004,40 @@ to yield for another coroutine to resume.
 ### Scope of Variables
 
 There are two kinds of variables in Lua, local and global. Globals are visible
-throughout the whole program, and local variables are only visible in the block
-where they have been declared. Good programming practice is to keep the number of
-globals down.
+throughout the _whole_ program,  The standard functions in Lua are mostly contained
+in global tables, like `math` and `table`.  An assignment like this:
+
+    newGlobal = 'hello'
+    
+causes `newGlobal` to be publically available - it is not just visible in the declared file.
+
+Global variables are contained in the global table. The variable `_G` refers to this
+table explicitly, so `_G.print` works as expected.  But otherwise there is nothing special
+about `_G` and setting it to some other value has no effect on program operation.
+
+To understand global functions you need to remember how tables and functions work. 
+It is easy to change the behaviour of the whole program by redefining a global:
+
+    function print(x)
+        io.write(tostring(x),'\n')
+    end
+    
+This is _totally_ equivalent to the following table key assignment:
+
+    _G["print"] = function(x) ... end
+    
+So you will not be surprised when this causes unexpected behaviour - suddenly every
+call to `print` works differently (since the new version only takes one argument.) 
+Sometimes this technique is useful and it has a name: "monkey patching". But 
+generally it is a disaster waiting to happen, because it messes with people's
+expectations of how a standard function works.
+
+Lua can not tell you that a function is undefined at compile-time. If you misspell a name
+`newGlbal` then it will just tell you that you have tried to call a `nil` value, because
+`_G["newGlbal"]` is `nil`.
+
+Local variables, on the other hand, are only visible in the block where they have
+been declared. 
 
 There are two places where local variables are implicitly declared; the first is the
 argument list of a function, and the second is the variables defined by a `for`
@@ -731,10 +1053,37 @@ and `k`,`v` are locals because they are `for` variables.
 
 Local variables always have a 'scope', which is the the part of the program where
 they are valid and visible.  In this function, `x` is visible up to the end of block
-B1 and `k` is visible up to the end of block B2. In particular, it is not defined in
-`print(k)`!
+B1 and `k` is visible up to the end of block B2. In particular, `k` is not visible in
+`print(k)`! And If a variable is undeclared, then Lua assumes it is global.
 
-If a variable is undefined - that is, not local - then it's assumed to be global.
+The problem then is that a misspelling is _not an error_ , just `nil` !
+
+Locals may be explicitly defined using the `local` keyword. This function makes a 
+'shallow copy' of a table by creating a new table and copying the key/value pairs:
+
+    function copy (t)
+        local res = {}
+        for k,v in pairs(t) do
+            res[k] = v
+        end
+        return res
+    end
+
+`local` is the correct way to do this, because then the variable `res` is not visible
+outside the function.  The function is 'pure', i.e. it has no global side-effects.
+
+Local declarations can 'nest' inside each other. Inside the for-loop, `k` has a different
+meaning to `k` outside the loop.
+
+    function dumpv( t )
+        local k = 1
+        for k.v in pairs(t) do
+            print(k,v)
+        end
+        print(k) -- 1  !
+    end
+
+Good programming practice is to make everything as local as possible. 
 
 ### Errors
 
