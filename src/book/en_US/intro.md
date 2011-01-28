@@ -36,9 +36,6 @@ A good start is the Lua [wiki](http://lua-users.org/wiki/LuaEditorSupport). If y
 are on Windows, then the Lua for WIndows distribution comes with SciTE, which also
 has Lua debugging support.
 
-There are a number of useful places to find this extra functionality, such as the
-[lua-users](http://lua-users.org/wiki/) wiki.
-
 ## Basics
 
 ### Expressions
@@ -77,7 +74,7 @@ have to use them is an important part of learning a programming language.
 Operations like `+` and `*` are called _operators_, and the values they operate on are 
 called _arguments_.  
 
-There is a remainder operator, `%` which gives the integer remainder from a divsion:
+There is a remainder operator, `%` which gives the integer remainder from a division:
 
     print(1 % 2) --> 1
     print(2 % 2)  --> 0
@@ -94,8 +91,8 @@ This is more readable when spread over two lines using a _variable_ `x`:
     x = 0.5*math.pi
     print('sin',math.sin(x),'cos',math.sin(x))
 
-Of course, you could say that `x` is not a variable, but Lua does not make any such
-distinction.
+Of course, you could say that `x` is not a variable, but Lua does not make any 
+distinction between variables and named constants.
 
 Even if the command-line is not your strong point, I recommend learning Lua interactively.
 
@@ -196,6 +193,7 @@ So to print a little table of sine values from 0 to &pi; with steps of 0.1:
         print(x, math.sin(x))
     end
 
+@ note [
 There is something you need to know about `for` variables; they only exist inside
 the block.
 
@@ -204,6 +202,7 @@ the block.
 
 You might expect that the last value printed would be 11, but the last `print` will
 show just `nil`; `i` is _not defined_ outside the loop.
+]
 
 ### Conditions
 
@@ -216,7 +215,7 @@ Programs often have to make choices.
 
 (Well, that's rude, but computers often are. You can't please everyone.)
 
-The expression in the `if` statement is called a _condition_. For intance,
+The expression in the `if` statement is called a _condition_. For instance,
 `10 == 10` is always `true`; `2 >= 3` (meaning 'greater or equal') is always `false`.
 
 Like Python and the C-like languages `==` is used for 'is equal', since a single `=`
@@ -244,7 +243,7 @@ And there may be multiple choices:
         end        
     end
     
-This style gets irritating fast, if there is more than two conditions.
+This style gets irritating  if there are more than two conditions.
 `if-else` statements can be combined together using the single word
 `elseif` (not the two words `else if`!)
 
@@ -280,7 +279,7 @@ of `and` is `false`, then there is no point in evaluating the second argument.
 
 In general,
 if a condition is `f() and g()`, then if the result of calling `f` is `false` there is no need to
-call `g`. Simularly, in `f() or g()` Lua will not call `g` if `f` returns `true`.
+call `g`. Simulary, in `f() or g()` Lua will not call `g` if `f` returns `true`.
 
 `if` statements can be used inside the `for` statement:
 
@@ -292,6 +291,7 @@ call `g`. Simularly, in `f() or g()` Lua will not call `g` if `f` returns `true`
         end
     end
 
+Generally any statement can be 'nested' inside any other statement.
 
 ### Conditional Loops
 
@@ -314,6 +314,8 @@ The other loop statement is `repeat`, where we loop _until_ a value is true.
         i = i + 1
     until i > 5
 
+For these simple tasks, it is better to use a `for` statement, but the condition in these loops
+can be more complex.
 
 ### Tables
 
@@ -373,7 +375,9 @@ check what is returned from an arbitrary tab;e access.  Since `nil` always indic
 
     arr = {1,2,nil,3,4}
     
-What is `#arr`? It may be 2, but it will definitely not be 5 !
+What is `#arr`? It may be 2, but it will definitely not be 5. In other words,
+it is undefined. Since inserting `nil` into an array causes such a
+breakdown of expected behavior, it is also called 'inserting a hole'.
 
 The same caution applies to creating arrays that start at 0.
 
@@ -381,7 +385,7 @@ The same caution applies to creating arrays that start at 0.
     for i = 0,9 do arr[i] = i end
 
 Well, `arr[0]` will be 0, and `arr[9]` will be 9, as expected. But `#arr` will be 9, not 10.
-And `table.sort` will only operate on indices between 1 and 9.  (So yes, it is possible
+And `table.sort` will only operate on indexes between 1 and 9.  (So yes, it is possible
 to arrange arrays from 0, but the standard table functions will not work as expected.)
 
 It is possible to compare tables for equality:
@@ -415,7 +419,7 @@ Lua table associates values called  'keys' with other values:
 
     M = {one=1,two=2,three=3}
 
-`M` operates like an array with string indices, so that we have:
+`M` operates like an array with string indexes, so that we have:
 
     print(M['one'],M['two'],M['three'])
     --> 1   2   3
@@ -435,7 +439,6 @@ generic `for` loops over.
 This example illustrates an important point; the _actual_ order of iteration is not
 the _original_ order.  (In fact the original order is lost, and extra information
 needs to be stored if you want the keys in a particular order.)
-
 
 ### Functions
 
@@ -1001,7 +1004,7 @@ to yield for another coroutine to resume.
 
 ## Programs
 
-Lua is often called a 'scripting languge' which implies that it is only suitable
+Lua is often called a 'scripting langauge' which implies that it is only suitable
 for bashing out little scripts to do specific tasks. This is not true; many
 commercial games have much of their functionality written in Lua, as do other products
 like Adobe Lightroom.  It has always been the fastest of the dynamic languages,
@@ -1052,7 +1055,7 @@ table explicitly, so `_G.print` works as expected.  But otherwise there is nothi
 about `_G` and setting it to some other value has no effect on program operation.
 
 To understand global functions you need to remember how tables and functions work. 
-It is easy to change the behaviour of the whole program by redefining a global:
+It is easy to change the behavior of the whole program by redefining a global:
 
     function print(x)
         io.write(tostring(x),'\n')
@@ -1062,7 +1065,7 @@ This is _totally_ equivalent to the following table key assignment:
 
     _G["print"] = function(x) ... end
     
-So you will not be surprised when this causes unexpected behaviour - suddenly every
+So you will not be surprised when this causes unexpected behavior - suddenly every
 call to `print` works differently (since the new version only takes one argument.) 
 Sometimes this technique is useful and it has a name: "monkey patching". But 
 generally it is a disaster waiting to happen, because it messes with people's
