@@ -281,6 +281,36 @@ In general,
 if a condition is `f() and g()`, then if the result of calling `f` is `false` there is no need to
 call `g`. Simulary, in `f() or g()` Lua will not call `g` if `f` returns `true`.
 
+`and` and `or` in Lua do not only return `true` or `false`.  `and` always returns its
+second argument if both arguments pass, or the argument that does not pass.
+(Only `nil` and `false` fail a condition.)
+
+    print (10 and "hello") --> hello
+    print (false and 42) --> false
+    print (42 and false) --> false
+    print(nil and 1) --> nil
+
+`or` will return the argument that succeeds (i.e not `nil` or `false`)
+    
+    print (10 or "hello") --> 10
+    print(false or 42)  --> 42
+    
+This leads to some common shortcuts in Lua code. For example,  this explicit statement
+for setting a default value:
+
+    if x == nil then
+        x = 'default'
+    end
+
+is often written like this:
+
+    x = x or 'default'
+    
+A common pattern for choosing one of two values looks like this:
+
+    a = 2
+    print(a > 0 and 'positive' or 'zero or negative')  -- positive
+
 `if` statements can be used inside the `for` statement:
 
     for i = 1,10 do
