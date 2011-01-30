@@ -1454,7 +1454,7 @@ Anonymous functions are useful for blocks that can raise errors:
 
     local status,err = pcall(function()
         do_something()
-        do_another()wit
+        do_another()
         and_again()
     end)
     if not status then
