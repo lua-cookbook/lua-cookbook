@@ -388,39 +388,6 @@ Well, `arr[0]` will be 0, and `arr[9]` will be 9, as expected. But `#arr` will b
 And `table.sort` will only operate on indexes between 1 and 9.  (So yes, it is possible
 to arrange arrays from 0, but the standard table functions will not work as expected.)
 
-Since holes are generally a bad idea, you must be careful not to insert any by 
-accident. Consider a task in which you want to get a list of objects from a list of
-names using a function `getObject` which may return `nil`.  You furthermore want
-the resulting list to have the same length as the list of strings:
-
-    local null = {}
-    local objects = {}
-    for i = 1,#strings do
-        local obj = getObject(strings[i])
-        if obj then
-            objects[i] = obj
-        else
-            objects[i] = null
-        end
-    end
-    
-That is, put some distinct and unique value into the array that stands for `nil`. Then
-when using the list of objects, test for this unique value:
-
-    for i = 1,#objects do
-        local obj = objects[i]
-        if obj == null then
-            print(i,'nada')
-        else
-            print(i,tostring(obj))
-        end
-    end
-    
-The list of objects remains a perfectly good array.
-    
-(In this code, variables are _explicitly_ declared as being local; we'll see why this is
-such a good idea later.)
-
 It is possible to compare tables for equality, as we did above:
 
     a1 = {10,20}
@@ -724,20 +691,20 @@ be careful to escape magic characters.)
 
 ### Tables
 
-We have encountered tables used as arrays and as dictionaries.
 The best way of seeing a Lua
 table is that it is an associative array that can have any kind of key, including
 numbers. It is very efficient at _behaving_ like an array, that is, consecutive
 integer keys starting at one.
 
-Here is a more general table:
+It is commonly said that a Lua table has both an array and a map part.
+It is more correct to say that it can be used both ways.
+
+Here is a more general table - note that the length operator `#` does not see any
+non-array keys:
 
     T = {10,20,30,40,50; sorted=true}
     print(t [1], #t, t [#t])  --> 10    5    50
     print(t["sorted"],  t.sorted) --> true     true
-
-It is commonly said that a Lua table has both an array and a map part.
-It is more correct to say that it can be used both ways.
 
 In Lua, `M.one` is _defined_ to be `M['one']`.  This gives us a way to do 
 'objects' or 'structures' with tables:
@@ -756,6 +723,42 @@ you must say `t["function"]`. The general way to construct such table is
       ["function"] = 1,
       ["end"] = 2
     }
+    
+In Lua, tables are used to represent arrays.  But inserting a `nil` value creates a hole,
+and the length operator `#` is no longer defined.
+
+You must be careful not to insert any holes by 
+accident. Consider a task in which you want to get a list of objects from a list of
+names using a function `getObject` which may return `nil`.  You furthermore want
+the resulting list to have the same length as the list of strings:
+
+    local null = {}
+    local objects = {}
+    for i = 1,#strings do
+        local obj = getObject(strings[i])
+        if obj then
+            objects[i] = obj
+        else
+            objects[i] = null
+        end
+    end
+    
+That is, put some distinct and unique value into the array that stands for `nil`. Then
+when using the list of objects, test for this unique value:
+
+    for i = 1,#objects do
+        local obj = objects[i]
+        if obj == null then
+            print(i,'nada')
+        else
+            print(i,tostring(obj))
+        end
+    end
+    
+The list of objects remains a perfectly good array.
+    
+(In this code, variables are _explicitly_ declared as being local; we'll see why this is
+such a good idea later.)
 
 Most of the `table` functions are meant to operate on arrays; you can sort them with
 `table.sort`. In the simple case the table must only contain numbers (or sortable
