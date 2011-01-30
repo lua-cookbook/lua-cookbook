@@ -125,6 +125,8 @@ a digit. So `check_number`, `checkNumber`, and `catch21` are fine, but `21catch`
 is not. There is no limit to the length of variable names, except the patience of you
 and your readers.
 
+Variables are _case-sensitive_.  `ERROR`,`Error` and `error` are all different variables.
+
 They may contain any Lua type:
 
     x = "hello"
