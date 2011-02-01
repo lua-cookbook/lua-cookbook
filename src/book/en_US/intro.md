@@ -873,6 +873,64 @@ this:
         print ('hello, world')
     end
 
+If you write functions like this, then other things become clear:
+
+    local one,two
+
+    one = function() return 1 end
+
+    two = function() return 2 end
+
+It is now clear that `one` and `two` are local variables refering to functions.
+
+In a similar way, the common statement
+
+    local function fun() .. end
+
+is totally equivalent to
+
+    local fun = function() .. end
+
+Recursion is a poweful technique for expressing some algorithms. The usual
+example is the factorial function, because `!n` is equal to `n ! (n-1)`. The important
+thing is to know _when to stop_ - in this case, `!0` is by definition 1.
+
+    function fact (n)
+        if n > 0 then
+            return n * fact(n - 1)
+        else
+            return 1
+        end
+    end
+
+(It helps to go through a few simple examples to convince yourself that this will
+indeed always stop.)
+
+It's necessary to take a little care when making local functions recursive. Writing
+it out explicitly helps to understand the problem.
+
+    local fact = function (n)
+        if n > 0 then
+            return n * fact(n - 1)
+        else
+            return 1
+        end
+    end
+
+The local variable `fact` does not exist when the function is created, and it will
+fail complaining about `fact` being `nil`.  Predeclaring the variable
+will ensure that the function gets the correct reference:
+
+    local fact
+    fact = function (n)
+        if n > 0 then
+            return n * fact(n - 1)
+        else
+            return 1
+        end
+    end
+
+
 It is common to put functions in tables:
 
     mod = {
