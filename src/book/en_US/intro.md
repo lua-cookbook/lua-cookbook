@@ -53,7 +53,7 @@ To run this example, save this line as 'hello.lua' and run from the command line
 
     $> lua hello.lua
     Hello world!
-    
+
 (Or, use an editor that knows how to run Lua, like SciTE in Lua for Windows. The F5 key
 will run the current program.)
 
@@ -67,12 +67,12 @@ The order of evaluation follows the usual rules, and you can use parentheses to 
 expressions - for example, `(1 + 2)*(3 + 4)`.  The original expression could be written like:
 
     (2 + (3 * (4 ^ 2))
-    
+
 which makes the order obvious. When in doubt, use parentheses, but knowing when you
 have to use them is an important part of learning a programming language.
 
-Operations like `+` and `*` are called _operators_, and the values they operate on are 
-called _arguments_.  
+Operations like `+` and `*` are called _operators_, and the values they operate on are
+called _arguments_.
 
 There is a remainder operator, `%` which gives the integer remainder from a division:
 
@@ -91,7 +91,7 @@ This is more readable when spread over two lines using a _variable_ `x`:
     x = 0.5*math.pi
     print('sin',math.sin(x),'cos',math.sin(x))
 
-Of course, you could say that `x` is not a variable, but Lua does not make any 
+Of course, you could say that `x` is not a variable, but Lua does not make any
 distinction between variables and named constants.
 
 Even if the command-line is not your strong point, I recommend learning Lua interactively.
@@ -107,7 +107,7 @@ Even if the command-line is not your strong point, I recommend learning Lua inte
     > p = math.pi
     > = math.cos(p)
     -1
-    
+
 Starting a line with `=` is a shortcut for `print()`.  Interactive Lua is a very
 useful scientific calculator !
 
@@ -116,7 +116,7 @@ SciTE toolbar, there is a prompt icon with the tooltip 'Launch Interactive Lua'.
 an interactive session in the output pane, and you can evaluate Lua statements. As with
 a console prompt, the up and down arrows can be used to select and re-evaluate
 previous statements.
-    
+
 
 ### Variables and Assignment
 
@@ -147,7 +147,7 @@ This sets `x` to 1 and `y` to 2. This is different from the usual `x=1, y=2` sty
 other languages. It is possible to swap the values of two variables in one line:
 
     x, y = y, x
-    
+
 The _assignment_ statement `x = 1` is not an expression - it does not return a value.
 
 ### Numeric `for` loops
@@ -184,7 +184,7 @@ However, the last example would be considered bad style. The logic of a program 
 much easier to follow if statements are laid out at the right columns.
 
 The numeric `for` statement loops from a start to a final value, inclusive. There can be a
-third number, which is the 'step' used in calculating the next value.  To print the 
+third number, which is the 'step' used in calculating the next value.  To print the
 greetings out backwards:
 
     for i = 5, 1, -1 do print("hello",  i) end
@@ -231,7 +231,7 @@ It is common to have two different actions based on the condition:
     else
         print("hello, kiddy!")
     end
-    
+
 And there may be multiple choices:
 
     age = 18
@@ -242,9 +242,9 @@ And there may be multiple choices:
             print("too old")
         else
             print("too young")
-        end        
+        end
     end
-    
+
 This style gets irritating  if there are more than two conditions.
 `if-else` statements can be combined together using the single word
 `elseif` (not the two words `else if`!)
@@ -266,18 +266,18 @@ In this expression, `>` and `==` evaluate first, followed by `and`, and then `or
 So the explicit form would be:
 
     ((a > 0) and (b > 0)) or ((a == 0) and (b < 0))
-    
-The `not` operator turns `true` into `false`, and vice versa. Instead of saying `age > 30` 
-you can say `not(age <= 30)`. The parenthesis is needed here because `not` has a 
+
+The `not` operator turns `true` into `false`, and vice versa. Instead of saying `age > 30`
+you can say `not(age <= 30)`. The parenthesis is needed here because `not` has a
 higher precedence than `<=`; in fact it has the highest precedence of the logical
 operators.
 
-Lua will 'short-circuit' logical expressions, For example, 
+Lua will 'short-circuit' logical expressions, For example,
 
     if type(n) == 'number' and n > 0 then .... end
-    
+
 `n > 0` will give an error if `n` is not a number, but Lua knows that if the first argument
-of `and` is `false`, then there is no point in evaluating the second argument. 
+of `and` is `false`, then there is no point in evaluating the second argument.
 
 In general,
 if a condition is `f() and g()`, then if the result of calling `f` is `false` there is no need to
@@ -293,10 +293,10 @@ second argument if both arguments pass, or the argument that does not pass.
     print(nil and 1) --> nil
 
 `or` will return the argument that succeeds (i.e not `nil` or `false`)
-    
+
     print (10 or "hello") --> 10
     print(false or 42)  --> 42
-    
+
 This leads to some common shortcuts in Lua code. For example,  this explicit statement
 for setting a default value:
 
@@ -307,7 +307,7 @@ for setting a default value:
 is often written like this:
 
     x = x or 'default'
-    
+
 A common pattern for choosing one of two values looks like this:
 
     a = 2
@@ -334,8 +334,8 @@ This produces the same output as the simple `for` statement example:
         print("hello",i)
         i = i + 1
     end
-    
-The body of the `while` loop is repeatedly executed _while_ a condition is true; 
+
+The body of the `while` loop is repeatedly executed _while_ a condition is true;
 each time one is added to the variable `i` , until it becomes 6, and the condition fails.
 
 The other loop statement is `repeat`, where we loop _until_ a value is true.
@@ -364,7 +364,7 @@ So to print out this array:
     for i = 1, #arr do print(arr[i]) end
 
 Arrays start with index 1; it's best to accept this and learn to live with the
-fact. 
+fact.
 
 These arrays are resizable; we can add new elements:
 
@@ -384,7 +384,7 @@ the squares of the first ten integers:
     for i = 1, 10 do
         arr[i] = i ^ 2
     end
-    
+
 Please notice that it is not necessary to specify the size of the array up front; a table
 will automatically increase in size.
 
@@ -406,7 +406,7 @@ check what is returned from an arbitrary tab;e access.  Since `nil` always indic
 'not found', it follows that you should not put `nil` into an array.  Consider:
 
     arr = {1,2,nil,3,4}
-    
+
 What is `#arr`? It may be 2, but it will definitely not be 5. In other words,
 it is undefined. Since inserting `nil` into an array causes such a
 breakdown of expected behavior, it is also called 'inserting a hole'.
@@ -435,8 +435,8 @@ in fact the same tables.
     print(a1 == a2) --> true !
     a1[2] = 2
     print(a2[2]) --> 2
-    
-`a1` and `a2` are merely names for the same thing - `a2` is just an _alias_ for `a1`.  
+
+`a1` and `a2` are merely names for the same thing - `a2` is just an _alias_ for `a1`.
 
 Newcomers to Lua are often surprised by the lack of 'obvious' functionality, like
 how to compare arrays 'properly' or how to print out an array. It helps to think of
@@ -454,7 +454,7 @@ Lua table associates values called  'keys' with other values:
 
     print(M['one'],M['two'],M['three'])
     --> 1   2   3
-   
+
 An unknown key always maps to `nil`, without causing an error.
 
 To iterate over all the keys and values requires the generic `for` loop:
@@ -494,8 +494,8 @@ out arrays, but it is easy to write one:
             print( t[ i ] )
         end
     end
-    
-A function does not _have_ to return a value; in this case we are not interested in the 
+
+A function does not _have_ to return a value; in this case we are not interested in the
 result, but the action.
 
 This `dump` is not so good for longer arrays, since each value is on its own line. The
@@ -508,7 +508,7 @@ standard function `io.write` writes out text without a line feed:
         end
         print()
     end
-    
+
     dumpline({10,20,30})
     --->
     10,20,30
@@ -516,7 +516,7 @@ standard function `io.write` writes out text without a line feed:
 True to its name, most of this Cookbook is dedicated to giving you functions to do
 useful things.
 
-## Types 
+## Types
 
 The standard function `type` returns the type of any Lua value:
 
@@ -738,7 +738,7 @@ non-array keys:
     print(t [1], #t, t [#t])  --> 10    5    50
     print(t["sorted"],  t.sorted) --> true     true
 
-In Lua, `M.one` is _defined_ to be `M['one']`.  This gives us a way to do 
+In Lua, `M.one` is _defined_ to be `M['one']`.  This gives us a way to do
 'objects' or 'structures' with tables:
 
     -- 'point' objects
@@ -747,19 +747,19 @@ In Lua, `M.one` is _defined_ to be `M['one']`.  This gives us a way to do
     -- adding two points
     sum = { x = s1.x + s2.x, y = s1.y + s2.y }
     print(sum.x, sum.y) --> 1    6
-    
+
 Something like `t.function` is a syntax error, because `function` is a keyword. In this case
-you must say `t["function"]`. The general way to construct such table is 
+you must say `t["function"]`. The general way to construct such table is
 
     t = {
       ["function"] = 1,
       ["end"] = 2
     }
-    
+
 In Lua, tables are used to represent arrays.  But inserting a `nil` value creates a hole,
 and the length operator `#` is no longer defined.
 
-You must be careful not to insert any holes by 
+You must be careful not to insert any holes by
 accident. Consider a task in which you want to get a list of objects from a list of
 names using a function `getObject` which may return `nil`.  You furthermore want
 the resulting list to have the same length as the list of strings:
@@ -774,7 +774,7 @@ the resulting list to have the same length as the list of strings:
             objects[i] = null
         end
     end
-    
+
 That is, put some distinct and unique value into the array that stands for `nil`. Then
 when using the list of objects, test for this unique value:
 
@@ -786,9 +786,9 @@ when using the list of objects, test for this unique value:
             print(i,tostring(obj))
         end
     end
-    
+
 The list of objects remains a perfectly good array.
-    
+
 (In this code, variables are _explicitly_ declared as being local; we'll see why this is
 such a good idea later.)
 
@@ -824,7 +824,7 @@ only access the array elements.
 
 You can say `ipairs{10,20}` and `print "hello"` in Lua. These are the two cases when
 Lua does not need parentheses when calling a function;
-if the function is being passed one argument and that argument is either a string 
+if the function is being passed one argument and that argument is either a string
 or a table constructor.
 
 A Lua function is also a value; you can assign it to a variable, pass it to another
@@ -840,7 +840,7 @@ This can be sorted using `table.sort` with a custom sort function:
 
 This is called an 'anonymous function', since it has not been given a name.
 
-In a real sense, all Lua functions are anonymous. 
+In a real sense, all Lua functions are anonymous.
 The usual definition of a function:
 
     function answer()
@@ -872,7 +872,7 @@ this:
     main = function()
         print ('hello, world')
     end
-    
+
 It is common to put functions in tables:
 
     mod = {
@@ -881,7 +881,7 @@ It is common to put functions in tables:
     }
     mod.start() --> start
     mod.finish() --> finish
-    
+
 So tables are used to implement what other languages call 'namespaces' or 'classes'
 
 This style is common enough that Lua provides a little bit of help:
@@ -889,7 +889,7 @@ This style is common enough that Lua provides a little bit of help:
     mod = {}
     function mod.start() .. end
     function mod.finish() .. end
-    
+
 That is, `function t.f().. end` is the same as `t.f = function() .. end`.
 
 A very interesting feature of Lua functions is that they may return _multiple values_:
@@ -899,14 +899,14 @@ A very interesting feature of Lua functions is that they may return _multiple va
     end
 
     name,age = multiple()
-    
+
 This is useful because Lua functions can very
-efficiently return a set of values without having to pack them into a table.    
+efficiently return a set of values without having to pack them into a table.
 
 @tip python [
 If you know Python, then you may think that `multiple` returns a 'tuple', which the
 assignment then helpfully unpacks, but the reality is simpler and weirder: this
-function genuinely returns two values. 
+function genuinely returns two values.
 ]
 
 Multiple return values are handled specially if they are returned by the _last_
@@ -953,7 +953,7 @@ really a most interesting result.  How does function `a` remember that `x` was 1
 The answer is that every time `adder` is called, it makes a new function. And that
 new function contains its own hidden variable that is initialized to the argument
 `x`.  This hidden variable is called an 'upvalue' and the resulting function called
-a 'closure'. 
+a 'closure'.
 
 Here is another example of a closure - a 'function with memory'
 
@@ -986,30 +986,30 @@ Although Lua has no concept of 'class', it is easy to construct objects with clo
 
     function Point (x,y)
         local self = {}
-        
+
         function self.getX()
             return x
         end
-        
+
         function self.getY()
             return y
         end
-        
+
         return self
     end
-    
+
     p = Point(10,20)
     print(p.getX()) --> 10
     print(p.getY()) --> 20
-    
+
 The returned table contains two closures - note that this is a perfectly encapsulated
 object; it is not possible to modify the value of `p`.
 
-The function `pairs` is said to return an iterator. What kind of animal is this? 
+The function `pairs` is said to return an iterator. What kind of animal is this?
 
 In its simplest form, an iterator is just a function of no arguments which returns different
 values each time, exactly like the counter functions. Usually, iterators know when
-to stop, which they do by returning `nil`. `iter` returns a closure which has two upvalues, 
+to stop, which they do by returning `nil`. `iter` returns a closure which has two upvalues,
 the table `t` and the index `i`.
 
     function iter(t)
@@ -1017,7 +1017,7 @@ the table `t` and the index `i`.
         return function()
             i = i + 1
             --> nil when i > #t - iteration stops!
-            return t[ i ]  
+            return t[ i ]
         end
     end
 
@@ -1069,6 +1069,97 @@ So each coroutine preserves its complete state, and is sleeping when not explici
 resumed. This is often called 'cooperative multitasking' because one coroutine has
 to yield for another coroutine to resume.
 
+`coroutine.wrap` will construct a function which resumes a coroutine.
+
+    f = coroutine.wrap(coco)
+    print(f()) -- 1
+    print(f()) -- 2
+    print(f()) -- 3
+    print(f()) -- nil
+
+(This is convenient, but if there is a problem an error will be raised and will
+need to be handled.
+With  `coroutine.resume` the first returned value is the status; if it's `false`
+then the second value is the error, just like `pcall`.)
+
+This is exactly what Lua considers a simple iterator: a function which can be
+repeatedly called,  returning new values and indicating the end with a `nil`.
+
+Coroutines help in making iterators where the logic is not so straightforward
+as the previous examples.  Consider the following data structure:
+
+T = {
+    value = 10,
+    left = {
+        value = 20,
+        left = {value = 40},
+        right = {value = 50},
+    },
+    right = {
+        value = 30
+    }
+}
+
+This kind of structure is often called a _tree_, in this case a binary tree because
+there are at most two branches at each note. The end nodes are often called
+_leaves_ because they have no branches.
+
+A recursive function for printing all the values s easy to write
+
+    function traverse(t)
+        if t.left then traverse(t.left) end
+        print (t.value)
+        if t.right then traverse(t.right) end
+    end
+
+    traverse(T)
+    -->
+    40
+    20
+    50
+    10
+    30
+
+This function will keep visiting the left branches until there isn't any, so it first
+visits `left = {value = 20..` and then `left = {value = 40}`; this node has no `left`
+so it prints out `value` (40), and so on.
+
+Now comes the key part: replace the `print` with `coroutine.yield` and turn it
+into a coroutine:
+
+    function traverse(t)
+        if t.left then traverse(t.left) end
+        coroutine.yield (t.value)
+        if t.right then traverse(t.right) end
+    end
+
+    c = coroutine.create(traverse)
+    print(coroutine.resume(c,T)) -- true   40
+    print(coroutine.resume(c,T)) -- true    20
+
+This can be made into an iterator if we make a function of no arguments from this
+coroutine:
+
+    function tree_iter(t)
+        return coroutine.wrap(function()
+            return traverse(t)
+        end)
+    end
+
+    for v in tree_iter(T) do print(v) end
+     -->
+    40
+    20
+    50
+    10
+    30
+
+`tree_iter` returns the iterator.
+Each time it is called, the coroutine yields, returning the value of
+the node. We keep yielding until the function finishes, when it returns `nil`.
+
+
+
 ## Programs
 
 Lua is often called a 'scripting langauge' which implies that it is only suitable
@@ -1114,27 +1205,27 @@ throughout the _whole_ program,  The standard functions in Lua are mostly contai
 in global tables, like `math` and `table`.  An assignment like this:
 
     newGlobal = 'hello'
-    
+
 causes `newGlobal` to be publically available - it is not just visible in the declared file.
 
 Global variables are contained in the global table. The variable `_G` refers to this
 table explicitly, so `_G.print` works as expected.  But otherwise there is nothing special
 about `_G` and setting it to some other value has no effect on program operation.
 
-To understand global functions you need to remember how tables and functions work. 
+To understand global functions you need to remember how tables and functions work.
 It is easy to change the behavior of the whole program by redefining a global:
 
     function print(x)
         io.write(tostring(x),'\n')
     end
-    
+
 This is _totally_ equivalent to the following table key assignment:
 
     _G["print"] = function(x) ... end
-    
+
 So you will not be surprised when this causes unexpected behavior - suddenly every
-call to `print` works differently (since the new version only takes one argument.) 
-Sometimes this technique is useful and it has a name: "monkey patching". But 
+call to `print` works differently (since the new version only takes one argument.)
+Sometimes this technique is useful and it has a name: "monkey patching". But
 generally it is a disaster waiting to happen, because it messes with people's
 expectations of how a standard function works.
 
@@ -1143,7 +1234,7 @@ Lua can not tell you that a function is undefined at compile-time. If you misspe
 `_G["newGlbal"]` is `nil`.
 
 Local variables, on the other hand, are only visible in the block where they have
-been declared. 
+been declared.
 
 There are two places where local variables are implicitly declared; the first is the
 argument list of a function, and the second is the variables defined by a `for`
@@ -1164,7 +1255,7 @@ B1 and `k` is visible up to the end of block B2. In particular, `k` is not visib
 
 The problem then is that a misspelling is _not an error_ , just `nil` !
 
-Locals may be explicitly defined using the `local` keyword. This function makes a 
+Locals may be explicitly defined using the `local` keyword. This function makes a
 'shallow copy' of a table by creating a new table and copying the key/value pairs:
 
     function copy (t)
