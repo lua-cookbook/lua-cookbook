@@ -113,6 +113,26 @@ string then you have two options:
   * _escape_ the magic character like so: '%$'
   * use `string.find(s,sub,1,true)`; the last argument means 'plain match'.
 
+`string.match` is similar to `string.find`, except that it does not return the
+index range, but rather the match itself.
+
+    print(string.match('hello dolly','%a+'))
+    --->
+    hello
+
+Here the pattern means 'one or more alphabetic characters', so the match gives
+us the first word.  You could do this with a combination of `string.find` and
+`string.sub`, but `string.match` is more general and efficient. Consider:
+
+    print(string.match('hello dolly','(%a+)%s+(%a+)'))
+    --->
+    hello     dolly
+
+Here `match` returns _two_ matches, which are indicated using parentheses
+in the string pattern. These are often called _captures_.  So the pattern
+would read like  this 'capture some letters, skip some space, and capture
+some more letters'.
+
 A very powerful function for modifying strings is `string.gsub` (for _global
 substitute_):
 
@@ -129,4 +149,40 @@ argument which lets you set the maximum number of substitutions:
 
 (There is no form that does a 'plain match' like `string.find` so you will have to
 be careful to escape magic characters.)
+
+Finally, there is `string.gmatch` which iterates over all the matches in a string.
+A common task is finding all the words in a string, separated by spaces. The
+pattern '%S+' means 'one or more non-space character', but `string.match` will
+only give you a fixed number of matches.
+
+    local str = 'one  two   three'
+    for s in string.gmatch(str,'%S+') do
+        print('"'..s..'"')
+    end
+    -->
+    "one"
+    "two"
+    "three"
+
+This suggests the following useful function, which breaks up a string into a
+table of words:
+
+    function split(str)
+        local t = {}
+        for s in string.gmatch(str.'%S+') do
+            t]#+1] = s
+        end
+        return t
+    end
+
+To split a string with other delimiters is just a matter of choosing the right
+pattern. For instance, '[%S,]+' matches
+'one or more characters from the set of non-space and comma'. You could
+use this to split 'one, two, three' into `{'one','two','three'}`.
+
+The special pattern '.' matches _one_ arbitrary byte. So
+
+    for c in string.gmatch('.') do print(string.byte(c)) end
+
+prints all the byte codes in a string.
 
