@@ -1,0 +1,2740 @@
+<div id="an-introduction-to-lua"
+><h1
+  ><a href="#TOC"
+    >An Introduction to Lua</a
+    ></h1
+  ><p
+  >This introduction assumes that you have some familiarity with basic programming.</p
+  ><p
+  >We recommend that you get a good programmer's editor which understands Lua syntax and can highlight it appropriately. This is not just because it's more attractive, but such an editor can immediately show you common mistakes like forgetting the closing quote on a string. Such editors can also match up parentheses and braces. They will often automatically <em
+    >indent</em
+    > code for you, which is important for readability..</p
+  ><p
+  >It is better to lay out code like this:</p
+  ><pre
+  ><code
+    >for i = 1,10 do
+    if i &lt; 5 then
+        print(&quot;lower&quot;,i)
+    else
+        print(&quot;upper&quot;,i)
+    end
+end
+</code
+    ></pre
+  ><p
+  >Than this:</p
+  ><pre
+  ><code
+    >for i = 1,10 do
+if i &lt; 5 then
+print(&quot;lower&quot;,i) else
+print(&quot;upper&quot;,i)
+end
+end
+</code
+    ></pre
+  ><p
+  >The logical structure of the code is now harder to see. By making indenting a habit, you will write code that will be more readable to another person. (After several months, you will be that other person.)</p
+  ><p
+  >A good start is the Lua <a href="http://lua-users.org/wiki/LuaEditorSupport"
+    >wiki</a
+    >. If you are on Windows, then the Lua for WIndows distribution comes with SciTE, which also has Lua debugging support.</p
+  ><div id="basics"
+  ><h2
+    ><a href="#TOC"
+      >Basics</a
+      ></h2
+    ><div id="expressions"
+    ><h3
+      ><a href="#TOC"
+	>Expressions</a
+	></h3
+      ><p
+      >It is traditional to start with &quot;Hello, world&quot;. Like all scripting languages, this is straightforward:</p
+      ><pre
+      ><code
+	>print(&quot;Hello world&quot;)
+</code
+	></pre
+      ><p
+      >An important point is that <code
+	>print</code
+	> is a function which takes a number of values and prints out these values to standard output. It is not a statement, as in Python 2.X or Basic.</p
+      ><p
+      >To run this example, save this line as 'hello.lua' and run from the command line:</p
+      ><pre
+      ><code
+	>$&gt; lua hello.lua
+Hello world!
+</code
+	></pre
+      ><p
+      >(Or, use an editor that knows how to run Lua, like SciTE in Lua for Windows. The F5 key will run the current program.)</p
+      ><p
+      >Arithmetic expressions use standard programming notation:</p
+      ><pre
+      ><code
+	>print(&quot;result&quot;,2 + 3 * 4 ^ 2)
+</code
+	></pre
+      ><p
+      >There is an exponentiation ('power of') operator <code
+	>^</code
+	>, unlike in C or Java.</p
+      ><p
+      >The order of evaluation follows the usual rules, and you can use parentheses to group expressions - for example, <code
+	>(1 + 2)*(3 + 4)</code
+	>. The original expression could be written like:</p
+      ><pre
+      ><code
+	>(2 + (3 * (4 ^ 2))
+</code
+	></pre
+      ><p
+      >which makes the order obvious. When in doubt, use parentheses, but knowing when you have to use them is an important part of learning a programming language.</p
+      ><p
+      >Operations like <code
+	>+</code
+	> and <code
+	>*</code
+	> are called <em
+	>operators</em
+	>, and the values they operate on are called <em
+	>arguments</em
+	>.</p
+      ><p
+      >There is a remainder operator, <code
+	>%</code
+	> which gives the integer remainder from a division:</p
+      ><pre
+      ><code
+	>print(1 % 2) --&gt; 1
+print(2 % 2)  --&gt; 0
+print(3 % 2) --&gt; 1
+</code
+	></pre
+      ><p
+      >There are the usual standard mathematical functions available in the <code
+	>math</code
+	> namespace (or <em
+	>table</em
+	>) like <code
+	>math.sin</code
+	>, <code
+	>math.sqrt</code
+	>,etc. The useful constant <code
+	>math.pi</code
+	> is also available.</p
+      ><pre
+      ><code
+	>print('sin', math.sin(0.5*math.pi), 'cos', math.cos(0.5*math.pi))
+</code
+	></pre
+      ><p
+      >This is more readable when spread over two lines using a <em
+	>variable</em
+	> <code
+	>x</code
+	>:</p
+      ><pre
+      ><code
+	>x = 0.5*math.pi
+print('sin',math.sin(x),'cos',math.sin(x))
+</code
+	></pre
+      ><p
+      >Of course, you could say that <code
+	>x</code
+	> is not a variable, but Lua does not make any distinction between variables and named constants.</p
+      ><p
+      >Even if the command-line is not your strong point, I recommend learning Lua interactively.</p
+      ><pre
+      ><code
+	>$&gt; lua
+Lua 5.1.4  Copyright (C) 1994-2008 Lua.org, PUC-Rio
+&gt; print(10 + 20)
+30
+&gt; = 10 + 20
+30
+&gt; = math.sin(2.3)
+0.74570521217672
+&gt; p = math.pi
+&gt; = math.cos(p)
+-1
+</code
+	></pre
+      ><p
+      >Starting a line with <code
+	>=</code
+	> is a shortcut for <code
+	>print()</code
+	>. Interactive Lua is a very useful scientific calculator !</p
+      ><p
+      >With Lua for Windows, it is not even necessary to open a command prompt. On the SciTE toolbar, there is a prompt icon with the tooltip 'Launch Interactive Lua'. It will open an interactive session in the output pane, and you can evaluate Lua statements. As with a console prompt, the up and down arrows can be used to select and re-evaluate previous statements.</p
+      ></div
+    ><div id="variables-and-assignment"
+    ><h3
+      ><a href="#TOC"
+	>Variables and Assignment</a
+	></h3
+      ><p
+      >Lua variables may have letters, digits and underscores ('_'), but they cannot start with a digit. So <code
+	>check_number</code
+	>, <code
+	>checkNumber</code
+	>, and <code
+	>catch21</code
+	> are fine, but <code
+	>21catch</code
+	> is not. There is no limit to the length of variable names, except the patience of you and your readers.</p
+      ><p
+      >Variables are <em
+	>case-sensitive</em
+	>. <code
+	>ERROR</code
+	>,<code
+	>Error</code
+	> and <code
+	>error</code
+	> are all different variables.</p
+      ><p
+      >They may contain any Lua type:</p
+      ><pre
+      ><code
+	>x = &quot;hello&quot;
+x = 1
+x = x + 1
+</code
+	></pre
+      ><p
+      >Here, the value of <code
+	>x</code
+	> becomes &quot;hello&quot;, and then it becomes 1, and finally 2 (which is the value of <code
+	>x + 1</code
+	>). This process is commonly called <em
+	>assignment</em
+	>.</p
+      ><p
+      >Variables have no fixed type, but always contain a definite type of value, even if it is just <code
+	>nil</code
+	>.</p
+      ><p
+      >Assigning multiple variables works like this:</p
+      ><pre
+      ><code
+	>x, y = 1, 2
+</code
+	></pre
+      ><p
+      >This sets <code
+	>x</code
+	> to 1 and <code
+	>y</code
+	> to 2. This is different from the usual <code
+	>x=1, y=2</code
+	> style in other languages. It is possible to swap the values of two variables in one line:</p
+      ><pre
+      ><code
+	>x, y = y, x
+</code
+	></pre
+      ><p
+      >The <em
+	>assignment</em
+	> statement <code
+	>x = 1</code
+	> is not an expression - it does not return a value.</p
+      ></div
+    ><div id="numeric-for-loops"
+    ><h3
+      ><a href="#TOC"
+	>Numeric <code
+	  >for</code
+	  > loops</a
+	></h3
+      ><p
+      >Programming is more than calculation. The simplest way to do something a number of times is the <em
+	>numeric for</em
+	> statement:</p
+      ><pre
+      ><code
+	>for i = 1, 5 do
+    print(&quot;hello&quot;,i)
+end
+--&gt;
+hello   1
+hello   2
+hello   3
+hello   4
+hello   5
+</code
+	></pre
+      ><p
+      >Any statements in the <em
+	>block</em
+	> from <code
+	>do</code
+	> to <code
+	>end</code
+	> are repeated with different values of the variable <code
+	>i</code
+	>.</p
+      ><p
+      >Spacing and line ends (often called 'whitespace') is usually not important. This code could also be written like so:</p
+      ><pre
+      ><code
+	>for i = 1, 5 do print(&quot;hello&quot;, i) end
+</code
+	></pre
+      ><p
+      >or</p
+      ><pre
+      ><code
+	>for i = 1, 5
+do
+print(&quot;hello&quot;,i)
+end
+</code
+	></pre
+      ><p
+      >However, the last example would be considered bad style. The logic of a program is much easier to follow if statements are laid out at the right columns.</p
+      ><p
+      >The numeric <code
+	>for</code
+	> statement loops from a start to a final value, inclusive. There can be a third number, which is the 'step' used in calculating the next value. To print the greetings out backwards:</p
+      ><pre
+      ><code
+	>for i = 5, 1, -1 do print(&quot;hello&quot;,  i) end
+</code
+	></pre
+      ><p
+      >So to print a little table of sine values from 0 to π with steps of 0.1:</p
+      ><pre
+      ><code
+	>for x = 0, math.pi, 0.1 do
+    print(x, math.sin(x))
+end
+</code
+	></pre
+      ><p
+      >@ note [ There is something you need to know about <code
+	>for</code
+	> variables; they only exist inside the block.</p
+      ><pre
+      ><code
+	>for i = 1,10 do print(i) end
+print(i)
+</code
+	></pre
+      ><p
+      >You might expect that the last value printed would be 11, but the last <code
+	>print</code
+	> will show just <code
+	>nil</code
+	>; <code
+	>i</code
+	> is <em
+	>not defined</em
+	> outside the loop. ]</p
+      ></div
+    ><div id="conditions"
+    ><h3
+      ><a href="#TOC"
+	>Conditions</a
+	></h3
+      ><p
+      >Programs often have to make choices.</p
+      ><pre
+      ><code
+	>age = 40
+if age &gt; 30 then
+   print(&quot;too old to play games!&quot;)
+end
+</code
+	></pre
+      ><p
+      >(Well, that's rude, but computers often are. You can't please everyone.)</p
+      ><p
+      >The expression in the <code
+	>if</code
+	> statement is called a <em
+	>condition</em
+	>. For instance, <code
+	>10 == 10</code
+	> is always <code
+	>true</code
+	>; <code
+	>2 &gt;= 3</code
+	> (meaning 'greater or equal') is always <code
+	>false</code
+	>.</p
+      ><p
+      >Like Python and the C-like languages <code
+	>==</code
+	> is used for 'is equal', since a single <code
+	>=</code
+	> has a very different meaning. Unlike them, 'not equal' is <code
+	>~=</code
+	> (the tilde <code
+	>~</code
+	> is usually the key on the far left side, next to <code
+	>!</code
+	>)</p
+      ><p
+      >It is common to have two different actions based on the condition:</p
+      ><pre
+      ><code
+	>if age &gt; 30 then
+    print(&quot;still too old&quot;)
+else
+    print(&quot;hello, kiddy!&quot;)
+end
+</code
+	></pre
+      ><p
+      >And there may be multiple choices:</p
+      ><pre
+      ><code
+	>age = 18
+if age == 18 then
+    print(&quot;just right&quot;)
+else
+    if age &gt; 30 then
+        print(&quot;too old&quot;)
+    else
+        print(&quot;too young&quot;)
+    end
+end
+</code
+	></pre
+      ><p
+      >This style gets irritating if there are more than two conditions. <code
+	>if-else</code
+	> statements can be combined together using the single word <code
+	>elseif</code
+	> (not the two words <code
+	>else if</code
+	>!)</p
+      ><pre
+      ><code
+	>age = 18
+if age == 18 then
+    print(&quot;just right&quot;)
+elseif age &gt; 30 then
+    print(&quot;too old&quot;)
+else
+    print(&quot;too young&quot;)
+end
+</code
+	></pre
+      ><p
+      >Conditional expressions can be combined with <code
+	>and</code
+	> or <code
+	>or</code
+	>:</p
+      ><pre
+      ><code
+	>a &gt; 0 and b &gt; 0 or a == 0 and b &lt; 0
+</code
+	></pre
+      ><p
+      >In this expression, <code
+	>&gt;</code
+	> and <code
+	>==</code
+	> evaluate first, followed by <code
+	>and</code
+	>, and then <code
+	>or</code
+	>. So the explicit form would be:</p
+      ><pre
+      ><code
+	>((a &gt; 0) and (b &gt; 0)) or ((a == 0) and (b &lt; 0))
+</code
+	></pre
+      ><p
+      >The <code
+	>not</code
+	> operator turns <code
+	>true</code
+	> into <code
+	>false</code
+	>, and vice versa. Instead of saying <code
+	>age &gt; 30</code
+	> you can say <code
+	>not(age &lt;= 30)</code
+	>. The parenthesis is needed here because <code
+	>not</code
+	> has a higher precedence than <code
+	>&lt;=</code
+	>; in fact it has the highest precedence of the logical operators.</p
+      ><p
+      >Lua will 'short-circuit' logical expressions, For example,</p
+      ><pre
+      ><code
+	>if type(n) == 'number' and n &gt; 0 then .... end
+</code
+	></pre
+      ><p
+      ><code
+	>n &gt; 0</code
+	> will give an error if <code
+	>n</code
+	> is not a number, but Lua knows that if the first argument of <code
+	>and</code
+	> is <code
+	>false</code
+	>, then there is no point in evaluating the second argument.</p
+      ><p
+      >In general, if a condition is <code
+	>f() and g()</code
+	>, then if the result of calling <code
+	>f</code
+	> is <code
+	>false</code
+	> there is no need to call <code
+	>g</code
+	>. Simulary, in <code
+	>f() or g()</code
+	> Lua will not call <code
+	>g</code
+	> if <code
+	>f</code
+	> returns <code
+	>true</code
+	>.</p
+      ><p
+      ><code
+	>and</code
+	> and <code
+	>or</code
+	> in Lua do not only return <code
+	>true</code
+	> or <code
+	>false</code
+	>. <code
+	>and</code
+	> always returns its second argument if both arguments pass, or the argument that does not pass. (Only <code
+	>nil</code
+	> and <code
+	>false</code
+	> fail a condition.)</p
+      ><pre
+      ><code
+	>print (10 and &quot;hello&quot;) --&gt; hello
+print (false and 42) --&gt; false
+print (42 and false) --&gt; false
+print(nil and 1) --&gt; nil
+</code
+	></pre
+      ><p
+      ><code
+	>or</code
+	> will return the argument that succeeds (i.e not <code
+	>nil</code
+	> or <code
+	>false</code
+	>)</p
+      ><pre
+      ><code
+	>print (10 or &quot;hello&quot;) --&gt; 10
+print(false or 42)  --&gt; 42
+</code
+	></pre
+      ><p
+      >This leads to some common shortcuts in Lua code. For example, this explicit statement for setting a default value:</p
+      ><pre
+      ><code
+	>if x == nil then
+    x = 'default'
+end
+</code
+	></pre
+      ><p
+      >is often written like this:</p
+      ><pre
+      ><code
+	>x = x or 'default'
+</code
+	></pre
+      ><p
+      >A common pattern for choosing one of two values looks like this:</p
+      ><pre
+      ><code
+	>a = 2
+print(a &gt; 0 and 'positive' or 'zero or negative')  -- positive
+</code
+	></pre
+      ><p
+      ><code
+	>if</code
+	> statements can be used inside the <code
+	>for</code
+	> statement:</p
+      ><pre
+      ><code
+	>for i = 1,10 do
+    if i &lt; 5 then
+        print(&quot;lower&quot;,i)
+    else
+        print(&quot;upper&quot;,i)
+    end
+end
+</code
+	></pre
+      ><p
+      >Generally any statement can be 'nested' inside any other statement.</p
+      ></div
+    ><div id="conditional-loops"
+    ><h3
+      ><a href="#TOC"
+	>Conditional Loops</a
+	></h3
+      ><p
+      >This produces the same output as the simple <code
+	>for</code
+	> statement example:</p
+      ><pre
+      ><code
+	>i = 1
+while i &lt; 5 do
+    print(&quot;hello&quot;,i)
+    i = i + 1
+end
+</code
+	></pre
+      ><p
+      >The body of the <code
+	>while</code
+	> loop is repeatedly executed <em
+	>while</em
+	> a condition is true; each time one is added to the variable <code
+	>i</code
+	> , until it becomes 6, and the condition fails.</p
+      ><p
+      >The other loop statement is <code
+	>repeat</code
+	>, where we loop <em
+	>until</em
+	> a value is true.</p
+      ><pre
+      ><code
+	>i = 1
+repeat
+    print(&quot;hello&quot;,i)
+    i = i + 1
+until i &gt; 5
+</code
+	></pre
+      ><p
+      >For these simple tasks, it is better to use a <code
+	>for</code
+	> statement, but the condition in these loops can be more complex.</p
+      ></div
+    ><div id="tables"
+    ><h3
+      ><a href="#TOC"
+	>Tables</a
+	></h3
+      ><p
+      >Often we need to store a number of values in order, usually called arrays or lists.</p
+      ><p
+      >Arrays in Lua are done using <em
+	>tables</em
+	>, which is a very general data structure. A simple array is easy to define:</p
+      ><pre
+      ><code
+	>arr = {10,20,30,40}
+</code
+	></pre
+      ><p
+      >and then the first element will be <code
+	>arr[1]</code
+	>, etc; the length of the array is <code
+	>#arr</code
+	>. So to print out this array:</p
+      ><pre
+      ><code
+	>for i = 1, #arr do print(arr[i]) end
+</code
+	></pre
+      ><p
+      >Arrays start with index 1; it's best to accept this and learn to live with the fact.</p
+      ><p
+      >These arrays are resizable; we can add new elements:</p
+      ><pre
+      ><code
+	>arr[#arr + 1] = 50
+</code
+	></pre
+      ><p
+      >and insert elements at some position using the standard function <code
+	>table.insert</code
+	>; the second argument is the index <em
+	>before</em
+	> where the value is inserted.</p
+      ><pre
+      ><code
+	>table.insert(arr, 1, 5)
+</code
+	></pre
+      ><p
+      >After these two operations the array now looks like <code
+	>{5,10,20,30,50,50}</code
+	>.</p
+      ><p
+      >Arrays can be constructed efficiently using a for-loop. This creates an array containing the squares of the first ten integers:</p
+      ><pre
+      ><code
+	>arr = {}  -- an empty table
+for i = 1, 10 do
+    arr[i] = i ^ 2
+end
+</code
+	></pre
+      ><p
+      >Please notice that it is not necessary to specify the size of the array up front; a table will automatically increase in size.</p
+      ><p
+      >To complete the picture, there is <code
+	>table.remove</code
+	> which removes a value at a given index.</p
+      ><p
+      >The function <code
+	>table.sort</code
+	> will sort an array of numbers in ascending order.</p
+      ><p
+      >Lua tables can contain any valid Lua value:</p
+      ><pre
+      ><code
+	>t = {10,'hello',{1,2}}
+</code
+	></pre
+      ><p
+      >So <code
+	>t[1]</code
+	> is a number, <code
+	>t[2]</code
+	> is a string, and <code
+	>t[3]</code
+	> is itself another table. (But do not expect <code
+	>table.sort</code
+	> to know what to do with <code
+	>t</code
+	> !)</p
+      ><p
+      >What about trying to access an element that does not exist, e.g. <code
+	>arr[20]</code
+	>? It will not raise an error, but return the value <code
+	>nil</code
+	>. So it is wise to carefully check what is returned from an arbitrary tab;e access. Since <code
+	>nil</code
+	> always indicates 'not found', it follows that you should not put <code
+	>nil</code
+	> into an array. Consider:</p
+      ><pre
+      ><code
+	>arr = {1,2,nil,3,4}
+</code
+	></pre
+      ><p
+      >What is <code
+	>#arr</code
+	>? It may be 2, but it will definitely not be 5. In other words, it is undefined. Since inserting <code
+	>nil</code
+	> into an array causes such a breakdown of expected behavior, it is also called 'inserting a hole'.</p
+      ><p
+      >The same caution applies to creating arrays that start at 0.</p
+      ><pre
+      ><code
+	>arr = {}
+for i = 0,9 do arr[i] = i end
+</code
+	></pre
+      ><p
+      >Well, <code
+	>arr[0]</code
+	> will be 0, and <code
+	>arr[9]</code
+	> will be 9, as expected. But <code
+	>#arr</code
+	> will be 9, not 10. And <code
+	>table.sort</code
+	> will only operate on indexes between 1 and 9. (So yes, it is possible to arrange arrays from 0, but the standard table functions will not work as expected.)</p
+      ><p
+      >It is possible to compare tables for equality, as we did above:</p
+      ><pre
+      ><code
+	>a1 = {10,20}
+a2 = {10,20}
+print(a1 == a2) --&gt; false !
+</code
+	></pre
+      ><p
+      >The result is <code
+	>false</code
+	> because <code
+	>a1</code
+	> and <code
+	>a2</code
+	> are different <em
+	>objects</em
+	>. Table comparison does not compare the elements, it just checks whether the arguments are in fact the same tables.</p
+      ><pre
+      ><code
+	>a1 = {10,20}
+a2 = a1
+print(a1 == a2) --&gt; true !
+a1[2] = 2
+print(a2[2]) --&gt; 2
+</code
+	></pre
+      ><p
+      ><code
+	>a1</code
+	> and <code
+	>a2</code
+	> are merely names for the same thing - <code
+	>a2</code
+	> is just an <em
+	>alias</em
+	> for <code
+	>a1</code
+	>.</p
+      ><p
+      >Newcomers to Lua are often surprised by the lack of 'obvious' functionality, like how to compare arrays 'properly' or how to print out an array. It helps to think of Lua as 'the C of dynamic languages' - lean and mean. It gives you a powerful core and you either build what you need, or reuse what others have provided, just as with C. The whole purpose of the Lua cookbook is to provide good solutions so you do not have to reinvent the wheel.</p
+      ><p
+      >There is another use of Lua tables, constructing 'dictionaries' or 'maps'. Generally a Lua table associates values called 'keys' with other values:</p
+      ><pre
+      ><code
+	>M = {one=1,two=2,three=3}
+</code
+	></pre
+      ><p
+      ><code
+	>M</code
+	> operates like an array with string indexes, so that we have:</p
+      ><pre
+      ><code
+	>print(M['one'],M['two'],M['three'])
+--&gt; 1   2   3
+</code
+	></pre
+      ><p
+      >An unknown key always maps to <code
+	>nil</code
+	>, without causing an error.</p
+      ><p
+      >To iterate over all the keys and values requires the generic <code
+	>for</code
+	> loop:</p
+      ><pre
+      ><code
+	>for key, value in pairs(M) do print(key, value) end
+--&gt; one     1
+--&gt; three   3
+--&gt; two     2
+</code
+	></pre
+      ><p
+      >The <code
+	>pairs</code
+	> function creates an <em
+	>iterator</em
+	> over the map key/value pairs which the generic <code
+	>for</code
+	> loops over.</p
+      ><p
+      >This example illustrates an important point; the <em
+	>actual</em
+	> order of iteration is not the <em
+	>original</em
+	> order. (In fact the original order is lost, and extra information needs to be stored if you want the keys in a particular order.)</p
+      ></div
+    ><div id="functions"
+    ><h3
+      ><a href="#TOC"
+	>Functions</a
+	></h3
+      ><p
+      >It is straightforward to create your own functions. Here is a sine function which works in degrees, not radians, using the standard function <code
+	>math.rad</code
+	> for converting degrees to radians:</p
+      ><pre
+      ><code
+	>function sin(x)
+    return math.sin(math.rad(x))
+end
+</code
+	></pre
+      ><p
+      >That is, after the keyword <code
+	>function</code
+	> there is the function name, an <em
+	>argument list</em
+	> and a group of statements ending with <code
+	>end</code
+	>. The keyword <code
+	>return</code
+	> takes an expression and makes it the value returned by the function.</p
+      ><p
+      >Functions are the building blocks of programs; any programmer collects useful functions like cooks collect tasty recipes. Lua does not provide a standard function to print out arrays, but it is easy to write one:</p
+      ><pre
+      ><code
+	>function dump(t)
+    for i = 1, #t do
+        print( t[ i ] )
+    end
+end
+</code
+	></pre
+      ><p
+      >A function does not <em
+	>have</em
+	> to return a value; in this case we are not interested in the result, but the action.</p
+      ><p
+      >This <code
+	>dump</code
+	> is not so good for longer arrays, since each value is on its own line. The standard function <code
+	>io.write</code
+	> writes out text without a line feed:</p
+      ><pre
+      ><code
+	>function dumpline (t)
+    for i = 1, #t do
+        io.write( t [ i ] )
+        if i &lt; #t then io.write( &quot;,&quot; ) end
+    end
+    print()
+end
+
+dumpline({10,20,30})
+---&gt;
+10,20,30
+</code
+	></pre
+      ><p
+      >True to its name, most of this Cookbook is dedicated to giving you functions to do useful things.</p
+      ></div
+    ></div
+  ><div id="types"
+  ><h2
+    ><a href="#TOC"
+      >Types</a
+      ></h2
+    ><p
+    >The standard function <code
+      >type</code
+      > returns the type of any Lua value:</p
+    ><pre
+    ><code
+      >type(&quot;&quot;) == &quot;string&quot;
+type(0) ==  &quot;number&quot;
+type({})) == &quot;table&quot;
+type(print) == &quot;function&quot;
+type(nil) == &quot;nil&quot;
+</code
+      ></pre
+    ><div id="nil"
+    ><h3
+      ><a href="#TOC"
+	><code
+	  >nil</code
+	  ></a
+	></h3
+      ><p
+      ><code
+	>nil</code
+	> is a special case; other languages call it <code
+	>NULL</code
+	>, <code
+	>nil</code
+	>,<code
+	>Nothing</code
+	>,<code
+	>null</code
+	>,etc. It is however a valid value and has a definite type, which is 'nil'.</p
+      ><p
+      >Only <code
+	>nil</code
+	> and the boolean <code
+	>false</code
+	> values make conditions fail.</p
+      ><p
+      >Otherwise, <code
+	>nil</code
+	> is special when used with tables; table elements cannot be <code
+	>nil</code
+	>.</p
+      ><p
+      >Be particularly careful when putting <code
+	>nil</code
+	> values into an array; these will become 'holes' and the value of <code
+	>#arr</code
+	> will become invalid.</p
+      ></div
+    ><div id="booleans"
+    ><h3
+      ><a href="#TOC"
+	>Booleans</a
+	></h3
+      ><p
+      >A boolean value is either <code
+	>true</code
+	> or <code
+	>false</code
+	>. The conditional operators, like <code
+	>&gt;</code
+	> and <code
+	>==</code
+	> return this value. The standard boolean operators <code
+	>and</code
+	> and <code
+	>or</code
+	> will usually also return 'boolean'.</p
+      ><p
+      >Only <code
+	>false</code
+	> and <code
+	>nil</code
+	> make a condition fail.</p
+      ><pre
+      ><code
+	>a = 5
+print(a &gt; 4)  --&gt; true
+print(a == 4) --&gt; false
+print(a &gt; 4 and a &lt; 10) --&gt; true
+</code
+	></pre
+      ></div
+    ><div id="numbers"
+    ><h3
+      ><a href="#TOC"
+	>Numbers</a
+	></h3
+      ><p
+      >Lua has only one type of number, which is usually double-precision floating-point on desktop machines. This means you do not usually have to worry about integers and floats; this is one of the simplifications which makes Lua so small and fast. If you worry about storing integers as double-precision floats, remember that integers can be <em
+	>exactly</em
+	> represented up to about 1e16.</p
+      ><p
+      >There are two rounding functions, <code
+	>math.floor</code
+	> and <code
+	>math.ceil</code
+	>; so given 3.1, the first gives the integer part (3), and the second gives the first integer that is larger (4). <code
+	>math.ceil(x)==x</code
+	> is only true if <code
+	>x</code
+	> is an integer.</p
+      ><pre
+      ><code
+	>function is_integer (x)
+    return math.ceil(x) == x
+end
+</code
+	></pre
+      ><p
+      >0 does not fail a condition, unlike C or Python.</p
+      ></div
+    ><div id="strings"
+    ><h3
+      ><a href="#TOC"
+	>Strings</a
+	></h3
+      ><p
+      >A Lua <em
+	>string</em
+	> is usually quoted text, but can actually include any byte value, including the so-called null byte. (You can for instance read a binary file into a Lua string without any corruption.)</p
+      ><p
+      >Both single and double quotes can be used, with no change in meaning - this is useful if you wish to quote a string inside a string:</p
+      ><p
+      >message = &quot;cannot find: 'dolly'&quot;</p
+      ><p
+      >The best advice is: be consistent in your quoting.</p
+      ><p
+      >Strings compare as you would expect using the locale, so that <code
+	>s1==s2</code
+	> behaves sensibly, unlike in Java. In Lua, identical strings are <em
+	>identical</em
+	> objects.</p
+      ><p
+      >There are cases where strings will be automatically considered to be numbers. For instance, <code
+	>&quot;2&quot;+&quot;3&quot;</code
+	> will be the number 5. But if any of the strings cannot be converted into a number, then there will be an error: &quot;attempt to perform arithmetic on a string value&quot;. It isn't a good idea to depend on this default behaviour, because your program will crash on bad input.</p
+      ><p
+      >The length operator <code
+	>#</code
+	> returns the number of bytes in a string, which is not necessarily the number of characters.</p
+      ></div
+    ><div id="tables-1"
+    ><h3
+      ><a href="#TOC"
+	>Tables</a
+	></h3
+      ><p
+      >Lua tables are <em
+	>associative arrays</em
+	>; indexing a table is giving it a <em
+	>key</em
+	> and getting a value. Any Lua value can be stored in a table, except for <code
+	>nil</code
+	>.</p
+      ><p
+      >They are very efficient at <em
+	>behaving</em
+	> like arrays, that is, consecutive integer keys starting at one. The length operator <code
+	>#</code
+	> only gives the number of these keys, not the total number of keys.</p
+      ></div
+    ><div id="functions-1"
+    ><h3
+      ><a href="#TOC"
+	>Functions</a
+	></h3
+      ><p
+      >In Lua, functions are <em
+	>first-class values</em
+	> - that is, they can be passed around like any other value.</p
+      ></div
+    ><div id="coroutines"
+    ><h3
+      ><a href="#TOC"
+	>Coroutines</a
+	></h3
+      ></div
+    ><div id="userdata"
+    ><h3
+      ><a href="#TOC"
+	>Userdata</a
+	></h3
+      ></div
+    ></div
+  ><div id="strings-1"
+  ><h2
+    ><a href="#TOC"
+      >Strings</a
+      ></h2
+    ><p
+    >The <code
+      >tonumber</code
+      > function will explicitly convert a string to a number; it will return <code
+      >nil</code
+      > if the conversion is not possible. It can also be used to convert hexadecimal numbers like so:</p
+    ><pre
+    ><code
+      >val = tonumber('FF',16) -- result is 255
+</code
+      ></pre
+    ><p
+    >How about converting numbers to strings? <code
+      >tostring</code
+      > does the general job of converting any Lua value into a string. (The <code
+      >print</code
+      > function calls <code
+      >tostring</code
+      > on its arguments.) If you want more control, then use the <code
+      >string.format</code
+      > function:</p
+    ><pre
+    ><code
+      >string.format(&quot;%5.2f&quot;,math.pi) == '&quot;3.14&quot;
+</code
+      ></pre
+    ><p
+    >These <code
+      >%</code
+      > format specifiers will be familiar to C and Python programmers, but basic usage is straightforward: the 'f' specifier has a total field with (5) and a number of decimal places (2) and gives fixed floating-point format; the 'e' specifier gives scientific notation. 's' is a string, 'd' is an integer, and 'x' is for outputing numbers in hex format.</p
+    ><pre
+    ><code
+      >print(string.format(&quot;The answer to the %s is %d&quot;, &quot;universe&quot;, 42) )
+--&gt;
+The answer to the universe is 42
+</code
+      ></pre
+    ><p
+    >There is a set of standard operations on strings. We saw that 'adding' strings would try to treat them as numbers. To join strings together (<em
+      >concatenate</em
+      >) there is the <code
+      >..</code
+      > operator:</p
+    ><pre
+    ><code
+      >&quot;1&quot;..&quot;2&quot; == &quot;12&quot;
+</code
+      ></pre
+    ><p
+    >Most languages use <code
+      >+</code
+      > to mean this, so note the difference. Using a different operator makes it clear, for instance, that <code
+      >1 .. 2</code
+      > results in the <em
+      >string</em
+      > '12'.</p
+    ><p
+    >As with arrays, <code
+      >#s</code
+      > is the length of the string <code
+      >s</code
+      >. (This is the number of <em
+      >bytes</em
+      >, not the number of characters.)</p
+    ><p
+    >The opposite operation is extracting substrings.</p
+    ><pre
+    ><code
+      >string.sub(&quot;hello&quot;,1,4) == &quot;hell&quot;
+string.sub(&quot;hello&quot;,4) == &quot;lo&quot;
+</code
+      ></pre
+    ><p
+    >The first number is the start index (starting at <em
+      >one</em
+      >, as with arrays) and the second number is the final index; the result includes the last index, so that <code
+      >sub(s,1,1)</code
+      > gives the first 'character' in the string:</p
+    ><pre
+    ><code
+      >-- printing out the characters of a string
+for i = 1,#s do
+   print(string.sub(s,i,i))
+end
+</code
+      ></pre
+    ><p
+    >It is not possible to treat a string as an array - <code
+      >s[i]</code
+      > is not meaningful. (It will just silently return <code
+      >nil</code
+      >) A Lua string is not a sequence of characters, but a read-only lump of bytes; it is not very efficient to process a string by iterating over its bytes and in fact Lua provides much more powerful techniques for string manipulation.</p
+    ><p
+    >For instance, a naive solution to the problem of finding a character in a string involves looking at one character at a time; the <code
+      >string.find</code
+      > function is faster and less trouble.</p
+    ><pre
+    ><code
+      >string.find('hello','e') == 2
+</code
+      ></pre
+    ><p
+    >In general, this function will return <em
+      >two</em
+      > values, the index of the start and the finish of the matched substring:</p
+    ><pre
+    ><code
+      >print(string.find('hello','lo'))
+--&gt; 4       5
+</code
+      ></pre
+    ><p
+    >(Which are exactly the numbers you need to feed to <code
+      >string.sub</code
+      >.)</p
+    ><p
+    >This may not seem so very useful, because we knew the length of the substring. However, <code
+      >string.find</code
+      > is much more powerful than a simple string matcher.</p
+    ><p
+    >In general, the 'substring' is a Lua string pattern. If you have previously met regular expressions, then string patterns will seem familiar. For instance, the string pattern 'l+' means 'one or more' repetitions of 'l'.</p
+    ><pre
+    ><code
+      >print(string.find('hello','l+'))
+--&gt; 3       4
+</code
+      ></pre
+    ><p
+    >'Character classes' make string patterns much more powerful. The pattern '[a-z]+' means 'one or more letter in the range 'a' to 'z':</p
+    ><pre
+    ><code
+      >print(string.find('hello','[a-z]+'))
+--&gt; 1       5
+</code
+      ></pre
+    ><p
+    >That is, it matches the whole string. So we could write a function <code
+      >is_lower</code
+      > like so:</p
+    ><pre
+    ><code
+      >function is_lower(s)
+    i1,i2 = string.find(s,'[a-z]+')
+    return i1 == 1 and i2 == #s
+end
+</code
+      ></pre
+    ><p
+    >But there is a neater way. The pattern '<sup
+      ><a href="#fn1" class="footnoteRef" id="fnref1"
+	>1</a
+	></sup
+      >+<span class="math"
+      >'<em
+	>does</em
+	><em
+	>the</em
+	><em
+	>job</em
+	>,<em
+	>since</em
+	><em
+	>it</em
+	><em
+	>says</em
+	><em
+	>that</em
+	><em
+	>the</em
+	><em
+	>sequence</em
+	><em
+	>of</em
+	><em
+	>one</em
+	><em
+	>or</em
+	><em
+	>more</em
+	><em
+	>letters</em
+	><em
+	>must</em
+	><em
+	>start</em
+	><em
+	>at</em
+	><em
+	>the</em
+	><em
+	>begining</em
+	>('^')<em
+	>and</em
+	><em
+	>end</em
+	><em
+	>at</em
+	><em
+	>the</em
+	><em
+	>finish</em
+	>('</span
+      >'). So <code
+      >string.find</code
+      > will return <code
+      >nil</code
+      > for ' hello'.</p
+    ><p
+    >Lua provides names for common character classes; '%a' is short for '[a-zA-Z]' and '%d' is short for '[0-9]'. '%s' stands for any whitespace, i.e. '[ ]'. The capital letter versions stand for any characters <em
+      >not</em
+      > in the set, so '%S' stands for anything that is not a space. So the pattern '^%S+$' will match any sequence of characters that does not contain a space. (These are different from the usual regular expression syntax, which is to use a backslash. So Lua patterns tend to be easier to read than regular expressions. However, they are more limited.)</p
+    ><p
+    >String patterns are an important part of learning Lua well, and we will return to them in this Cookbook. But you should always be aware of them, because <code
+      >string.find</code
+      > normally assumes that the match is a pattern that contains 'magic' characters. For instance, '<span class="math"
+      >'<em
+	>stands</em
+	><em
+	>for</em
+	>'<em
+	>end</em
+	><em
+	>of</em
+	><em
+	>string</em
+	>';<em
+	>if</em
+	><em
+	>you</em
+	><em
+	>wanted</em
+	><em
+	>to</em
+	><em
+	>find</em
+	><em
+	>an</em
+	><em
+	>actual</em
+	>'</span
+      >' in a string then you have two options:</p
+    ><ul
+    ><li
+      ><em
+	>escape</em
+	> the magic character like so: '%$'</li
+      ><li
+      >use <code
+	>string.find(s,sub,1,true)</code
+	>; the last argument means 'plain match'.</li
+      ></ul
+    ><p
+    ><code
+      >string.match</code
+      > is similar to <code
+      >string.find</code
+      >, except that it does not return the index range, but rather the match itself.</p
+    ><pre
+    ><code
+      >print(string.match('hello dolly','%a+'))
+---&gt;
+hello
+</code
+      ></pre
+    ><p
+    >Here the pattern means 'one or more alphabetic characters', so the match gives us the first word. You could do this with a combination of <code
+      >string.find</code
+      > and <code
+      >string.sub</code
+      >, but <code
+      >string.match</code
+      > is more general and efficient. Consider:</p
+    ><pre
+    ><code
+      >print(string.match('hello dolly','(%a+)%s+(%a+)'))
+---&gt;
+hello     dolly
+</code
+      ></pre
+    ><p
+    >Here <code
+      >match</code
+      > returns <em
+      >two</em
+      > matches, which are indicated using parentheses in the string pattern. These are often called <em
+      >captures</em
+      >. So the pattern would read like this 'capture some letters, skip some space, and capture some more letters'.</p
+    ><p
+    >A very powerful function for modifying strings is <code
+      >string.gsub</code
+      > (for <em
+      >global substitute</em
+      >):</p
+    ><pre
+    ><code
+      >print(string.gsub('hello help','e','a'))
+--&gt; hallo halp     2
+</code
+      ></pre
+    ><p
+    >It replaces <em
+      >each</em
+      > match of the pattern with a given string, and returns the resulting string and the number of substitutions. There can also be a fourth argument which lets you set the maximum number of substitutions:</p
+    ><pre
+    ><code
+      >print(string.gsub('hello help','e','a',1))
+--&gt; hallo help      1
+</code
+      ></pre
+    ><p
+    >(There is no form that does a 'plain match' like <code
+      >string.find</code
+      > so you will have to be careful to escape magic characters.)</p
+    ><p
+    >Finally, there is <code
+      >string.gmatch</code
+      > which iterates over all the matches in a string. A common task is finding all the words in a string, separated by spaces. The pattern '%S+' means 'one or more non-space character', but <code
+      >string.match</code
+      > will only give you a fixed number of matches.</p
+    ><pre
+    ><code
+      >local str = 'one  two   three'
+for s in string.gmatch(str,'%S+') do
+    print('&quot;'..s..'&quot;')
+end
+--&gt;
+&quot;one&quot;
+&quot;two&quot;
+&quot;three&quot;
+</code
+      ></pre
+    ><p
+    >This suggests the following useful function, which breaks up a string into a table of words:</p
+    ><pre
+    ><code
+      >function split(str)
+    local t = {}
+    for s in string.gmatch(str.'%S+') do
+        t]#+1] = s
+    end
+    return t
+end
+</code
+      ></pre
+    ><p
+    >To split a string with other delimiters is just a matter of choosing the right pattern. For instance, '[%S,]+' matches 'one or more characters from the set of non-space and comma'. You could use this to split 'one, two, three' into <code
+      >{'one','two','three'}</code
+      >.</p
+    ><p
+    >The special pattern '.' matches <em
+      >one</em
+      > arbitrary byte. So</p
+    ><pre
+    ><code
+      >for c in string.gmatch('.') do print(string.byte(c)) end
+</code
+      ></pre
+    ><p
+    >prints all the byte codes in a string.</p
+    ></div
+  ><div id="tables-2"
+  ><h2
+    ><a href="#TOC"
+      >Tables</a
+      ></h2
+    ><p
+    >It is commonly said that a Lua table has both an array and a map part. It is more correct to say that it can be used both ways.</p
+    ><p
+    >Here is a more general table - note that the length operator <code
+      >#</code
+      > does not see any non-array keys:</p
+    ><pre
+    ><code
+      >T = {10,20,30,40,50; sorted=true}
+print(t [1], #t, t [#t])  --&gt; 10    5    50
+print(t[&quot;sorted&quot;],  t.sorted) --&gt; true     true
+</code
+      ></pre
+    ><p
+    >In Lua, <code
+      >M.one</code
+      > is <em
+      >defined</em
+      > to be <code
+      >M['one']</code
+      >. This gives us a way to do 'objects' or 'structures' with tables:</p
+    ><pre
+    ><code
+      >-- 'point' objects
+s1 = {x = 1, y = 2}
+s2 = {x = 0, y = 4}
+-- adding two points
+sum = { x = s1.x + s2.x, y = s1.y + s2.y }
+print(sum.x, sum.y) --&gt; 1    6
+</code
+      ></pre
+    ><p
+    >Something like <code
+      >t.function</code
+      > is a syntax error, because <code
+      >function</code
+      > is a keyword. In this case you must say <code
+      >t[&quot;function&quot;]</code
+      >. The general way to construct such table is</p
+    ><pre
+    ><code
+      >t = {
+  [&quot;function&quot;] = 1,
+  [&quot;end&quot;] = 2
+}
+</code
+      ></pre
+    ><p
+    >In Lua, tables are used to represent arrays. But inserting a <code
+      >nil</code
+      > value creates a hole, and the length operator <code
+      >#</code
+      > is no longer defined.</p
+    ><p
+    >You must be careful not to insert any holes by accident. Consider a task in which you want to get a list of objects from a list of names using a function <code
+      >getObject</code
+      > which may return <code
+      >nil</code
+      >. You furthermore want the resulting list to have the same length as the list of strings:</p
+    ><pre
+    ><code
+      >local null = {}
+local objects = {}
+for i = 1,#strings do
+    local obj = getObject(strings[i])
+    if obj then
+        objects[i] = obj
+    else
+        objects[i] = null
+    end
+end
+</code
+      ></pre
+    ><p
+    >That is, put some distinct and unique value into the array that stands for <code
+      >nil</code
+      >. Then when using the list of objects, test for this unique value:</p
+    ><pre
+    ><code
+      >for i = 1,#objects do
+    local obj = objects[i]
+    if obj == null then
+        print(i,'nada')
+    else
+        print(i,tostring(obj))
+    end
+end
+</code
+      ></pre
+    ><p
+    >The list of objects remains a perfectly good array.</p
+    ><p
+    >(In this code, variables are <em
+      >explicitly</em
+      > declared as being local; we'll see why this is such a good idea later.)</p
+    ><p
+    >Most of the <code
+      >table</code
+      > functions are meant to operate on arrays; you can sort them with <code
+      >table.sort</code
+      >. In the simple case the table must only contain numbers (or sortable objects), but a sort function can be provided.</p
+    ><p
+    >Arrays of strings can be joined together with <code
+      >table.concat</code
+      >. This is the most efficient way to build up large strings:</p
+    ><pre
+    ><code
+      >local res = {}
+for i = 1,1000 do
+    res[i] = &quot;hello &quot;..i
+end
+str = table.concat(res)
+</code
+      ></pre
+    ><p
+    >(Note that <code
+      >table.concat</code
+      > is picky about the array elements; they must either be numbers or strings. If in doubt, use <code
+      >tostring</code
+      > to convert values first.)</p
+    ><p
+    >The most commonly used function with tables is <code
+      >pairs</code
+      > which allows you to iterate over all the elements. There is a corresponding function <code
+      >ipairs</code
+      > which works for arrays:</p
+    ><pre
+    ><code
+      >for i,v in ipairs{10,20,30; x=1} do print(i,v) end
+--&gt; 1   10
+--&gt; 2   20
+--&gt; 3   30
+</code
+      ></pre
+    ><p
+    >Unlike <code
+      >pairs</code
+      >, <code
+      >ipairs</code
+      > will give you the keys in the correct order, and it will only access the array elements.</p
+    ></div
+  ><div id="coroutines-1"
+  ><h2
+    ><a href="#TOC"
+      >Coroutines</a
+      ></h2
+    ><p
+    >Although coroutines are sometimes called threads (and <code
+      >type</code
+      > returns 'thread' as their type) they are not operating system threads as usually understood. (Lua sometimes runs on machines that don't even have the luxury of an operating system.)</p
+    ><p
+    >Rather, a coroutine is another kind of 'function with memory'. Once a coroutine is created from a regular Lua function, it can be resumed; the coroutine yields and waits for the caller to resume it again. Unlike a function which is repeatedly called, it resumes exactly at the point where it last yielded.</p
+    ><pre
+    ><code
+      >function coco()
+    print '1'
+    coroutine.yield(1)
+    print '2'
+    coroutine.yield(2)
+    print '3'
+    coroutine.yield(3)
+end
+
+c = coroutine.create(coco)
+print(coroutine.resume(c))
+print(coroutine.resume(c))
+print(coroutine.resume(c))
+
+----&gt; output:
+1
+true    1
+2
+true    2
+3
+true    3
+</code
+      ></pre
+    ><p
+    >The first <code
+      >resume</code
+      > call causes the first <code
+      >yield</code
+      > call (after printing 1) and we get the value that was passed to <code
+      >yield</code
+      >. The second <code
+      >resume</code
+      > call makes the <code
+      >yield</code
+      > return and we print out 2, etc. The key idea is that the coroutine <em
+      >remembers where it was</em
+      > and resumes where it last was executing.</p
+    ><p
+    >So each coroutine preserves its complete state, and is sleeping when not explicitly resumed. This is often called 'cooperative multitasking' because one coroutine has to yield for another coroutine to resume.</p
+    ><p
+    ><code
+      >coroutine.wrap</code
+      > will construct a function which resumes a coroutine.</p
+    ><pre
+    ><code
+      >f = coroutine.wrap(coco)
+print(f()) -- 1
+print(f()) -- 2
+print(f()) -- 3
+print(f()) -- nil
+</code
+      ></pre
+    ><p
+    >(This is convenient, but if there is a problem an error will be raised and will need to be handled. With <code
+      >coroutine.resume</code
+      > the first returned value is the status; if it's <code
+      >false</code
+      > then the second value is the error, just like <code
+      >pcall</code
+      >.)</p
+    ><p
+    >This is exactly what Lua considers a simple iterator: a function which can be repeatedly called, returning new values and indicating the end with a <code
+      >nil</code
+      >.</p
+    ><p
+    >Coroutines help in making iterators where the logic is not so straightforward as the previous examples. Consider the following data structure:</p
+    ><p
+    >T = { value = 10, left = { value = 20, left = {value = 40}, right = {value = 50}, }, right = { value = 30 } }</p
+    ><p
+    >This kind of structure is often called a <em
+      >tree</em
+      >, in this case a binary tree because there are at most two branches at each note. The end nodes are often called <em
+      >leaves</em
+      > because they have no branches.</p
+    ><p
+    >A recursive function for printing all the values s easy to write</p
+    ><pre
+    ><code
+      >function traverse(t)
+    if t.left then traverse(t.left) end
+    print (t.value)
+    if t.right then traverse(t.right) end
+end
+
+traverse(T)
+--&gt;
+40
+20
+50
+10
+30
+</code
+      ></pre
+    ><p
+    >This function will keep visiting the left branches until there isn't any, so it first visits <code
+      >left = {value = 20..</code
+      > and then <code
+      >left = {value = 40}</code
+      >; this node has no <code
+      >left</code
+      > so it prints out <code
+      >value</code
+      > (40), and so on.</p
+    ><p
+    >Now comes the key part: replace the <code
+      >print</code
+      > with <code
+      >coroutine.yield</code
+      > and turn it into a coroutine:</p
+    ><pre
+    ><code
+      >function traverse(t)
+    if t.left then traverse(t.left) end
+    coroutine.yield (t.value)
+    if t.right then traverse(t.right) end
+end
+
+c = coroutine.create(traverse)
+print(coroutine.resume(c,T)) -- true   40
+print(coroutine.resume(c,T)) -- true    20
+</code
+      ></pre
+    ><p
+    >This can be made into an iterator if we make a function of no arguments from this coroutine:</p
+    ><pre
+    ><code
+      >function tree_iter(t)
+    return coroutine.wrap(function()
+        return traverse(t)
+    end)
+end
+
+for v in tree_iter(T) do print(v) end
+ --&gt;
+40
+20
+50
+10
+30
+</code
+      ></pre
+    ><p
+    ><code
+      >tree_iter</code
+      > returns the iterator. Each time it is called, the coroutine yields, returning the value of the node. We keep yielding until the function finishes, when it returns <code
+      >nil</code
+      >.</p
+    ></div
+  ><div id="programs"
+  ><h2
+    ><a href="#TOC"
+      >Programs</a
+      ></h2
+    ><p
+    >Lua is often called a 'scripting langauge' which implies that it is only suitable for bashing out little scripts to do specific tasks. This is not true; many commercial games have much of their functionality written in Lua, as do other products like Adobe Lightroom. It has always been the fastest of the dynamic languages, typically several times faster than Python or Ruby, and the LuaJIT just-in-time compiler can give performance equivalent to conventional compiled languages.</p
+    ><p
+    >However, there are certain habits that are essential in writing robust Lua code which can be safely used to build large applications. The difference between a 'script' and a 'program' is fairly arbitrary. A script is often defined as a small program that does a specific task that is meant as a tool for knowledgeable users. Compilation does not magically transform a script into a program, however the built-in discipline of statically-typed languages helps to debug faults before actually running them. Everything is declared, and everything has a definite type. With a dynamically-typed language, you have to provide that discipline.</p
+    ><p
+    >For example, a script can use only global variables, and work fine. But experience shows that you will enter a zone of frustrating debugging if you write non-trivial applications in this way.</p
+    ><p
+    >Lua is in fact compiled before it executes, although commonly the generated 'bytecode' is not saved, since the compiler is so fast as to be practically instantaneous on everything except the largest programs. This means that syntax errors (like forgetting to say <code
+      >then</code
+      > after <code
+      >if</code
+      >) will be caught immediately.</p
+    ><p
+    >However, these are easy errors to avoid and you will find yourself making fewer with time, since Lua has a simple syntax and there are not too many rules to remember. But misspelling variables is not a compiler error, and not a run-time error either, as we will see.</p
+    ><p
+    >For a larger application, it is important to spread it out over multiple files. So it is important to know how to build and use libraries of dependable code. By knowing what libraries are available in the Lua universe, you can avoid re-inventing wheels and get on with building the car.</p
+    ></div
+  ><div id="modules"
+  ><h2
+    ><a href="#TOC"
+      >Modules</a
+      ></h2
+    ><p
+    >The global function <code
+      >dofile</code
+      > will evaluate a Lua file. However, it is not very useful for organizing libraries and large programs. It takes a full path to the Lua file, which is a problem for programs that need to be portable, and it will always load the source file each time.</p
+    ><p
+    ><code
+      >require</code
+      > solves these problems by looking for the Lua file in standard locations, and only loading it once.</p
+    ><p
+    ><code
+      >require</code
+      > is given a <em
+      >module name</em
+      >, without an extension. To understand how the modules are found, it is useful to look at the error message you get when a module is <em
+      >not</em
+      > found:</p
+    ><pre
+    ><code
+      >require 'alice'
+---&gt; a Linux machine
+lua: module 'alice' not found:
+    no field package.preload['alice']
+    no file './alice.lua'
+    no file '/usr/local/share/lua/5.1/alice.lua'
+    no file '/usr/local/share/lua/5.1/alice/init.lua'
+    no file './alice.so'
+    no file '/usr/local/lib/lua/5.1/alice.so'
+    no file '/usr/local/lib/lua/5.1/loadall.so'
+--&gt; a Windows machine
+lua: module 'alice' not found:
+    no field package.preload['alice']
+    no file '.\alice.lua'
+    no file 'C:\Program Files\Lua\5.1\lua\alice.lua'
+    no file 'C:\Program Files\Lua\5.1\lua\alice\init.lua'
+    no file 'C:\Program Files\Lua\5.1\alice.lua'
+    no file 'C:\Program Files\Lua\5.1\alice\init.lua'
+    no file 'C:\Program Files\Lua\5.1\lua\alice.luac'
+    no file '.\alice.dll'
+    no file '.\alice51.dll'
+    no file 'C:\Program Files\Lua\5.1\alice.dll'
+    no file 'C:\Program Files\Lua\5.1\clibs\alice.dll'
+    no file 'C:\Program Files\Lua\5.1\loadall.dll'
+    no file 'C:\Program Files\Lua\5.1\clibs\loadall.dll'
+</code
+      ></pre
+    ><p
+    >The first place where <code
+      >require</code
+      > looks is the current directory; if there was a file <code
+      >alice.lua</code
+      > in the same directory as this program, it would be loaded. Then it will look in a few standard places - for Unix this is usually the directory <code
+      >/usr/local/share/lua/5.1</code
+      > and for Lua for Windows it is the <code
+      >lua</code
+      > subdirectory of the installation directory.</p
+    ><p
+    >Then things get interesting; it starts looking for <code
+      >.so</code
+      > files on Unix and <code
+      >.dll</code
+      > files on Windows - these are <em
+      >binary Lua extensions</em
+      > which are shared libraries, usually written in C. So <code
+      >require</code
+      > will load both pure Lua and binary modules.</p
+    ><p
+    >How does Lua know which locations to search? The system variable <code
+      >package.path</code
+      > contains the locations where Lua modules will be found. it is a string containing <em
+      >patterns</em
+      > separated by semi-colons: (I've printed these patterns on separate lines for clarity)</p
+    ><pre
+    ><code
+      >print(package.path)
+--&gt;
+./?.lua;
+/usr/local/share/lua/5.1/?.lua;
+/usr/local/share/lua/5.1/?/init.lua;
+</code
+      ></pre
+    ><p
+    >The procedure to find module <code
+      >alice</code
+      > is simple; take each of these patterns, and replace <code
+      >?</code
+      > with 'alice'; if the result is an existing file, load it.</p
+    ><p
+    >(Remember that Lua has <em
+      >no</em
+      > built-in concept of a file system; this search is done by string substitution followed by an attempt to open the result.)</p
+    ><p
+    >If this search fails, then Lua will use <code
+      >package.cpath</code
+      > to find a binary extension in a similar way. So you can see that the error message is detailing exactly what happens in this process.</p
+    ><p
+    >So, to summarize, <code
+      >require</code
+      >:</p
+    ><ul
+    ><li
+      >takes a module name, not a file name</li
+      ><li
+      >looks for both Lua files and shared libraries (binary extensions)</li
+      ><li
+      >only loads the module once</li
+      ><li
+      >looks on the Lua and extension paths</li
+      ></ul
+    ><p
+    >A simple way to try this out is to create a Lua file <code
+      >mod1.lua</code
+      >:</p
+    ><pre
+    ><code
+      >-- mod1.lua
+print(&quot;hello&quot;)
+</code
+      ></pre
+    ><p
+    >and require it from <code
+      >usemod1.lua</code
+      >, in the same directory:</p
+    ><pre
+    ><code
+      >-- usemod1.lua
+require(&quot;mod1&quot;)
+print(&quot;dolly&quot;)
+--&gt;
+hello
+dolly
+</code
+      ></pre
+    ><p
+    >Which shows that the file loaded by <code
+      >require</code
+      > can be any Lua code. Actually, the word 'module' is just a word we use to describe Lua files that are generally useful for different programs to use - there is no formal concept of 'module' in the language itself.</p
+    ><p
+    >Modules are usually used to make functions and data available to a program. It is better to put these into their own table:</p
+    ><pre
+    ><code
+      >-- mod2.lua
+mod2 = {}
+mod2.answer = function()
+    return 42
+end
+</code
+      ></pre
+    ><p
+    >Now, after <code
+      >require(&quot;mod2&quot;)</code
+      > our code can call <code
+      >mod2.answer()</code
+      >. There can now be a number of functions called <code
+      >answer</code
+      > in the program and they will not interfere with each other.</p
+    ><p
+    >If you move <code
+      >mod2.lua</code
+      > to a location on your Lua path (such as '/usr/local/share/lua/5.1/') then a Lua program anywhere on the system can load the module <code
+      >mod2</code
+      >.</p
+    ><p
+    >Of course, to copy files into the system-wide directory often requires superuser privileges. These standard directories are built into Lua and may not be convenient for your purposes.</p
+    ><p
+    >You can add other directories to the Lua module path by setting the environment variable <code
+      >LUA_PATH</code
+      >. For a Bash shell on Unix this would look like:</p
+    ><pre
+    ><code
+      >export LUA_PATH=&quot;;;/home/steve/lualibs/?.lua&quot;
+</code
+      ></pre
+    ><p
+    >On Windows:</p
+    ><pre
+    ><code
+      >set LUA_PATH=;;c:\lua\lualibs\?.lua
+</code
+      ></pre
+    ><p
+    >Please note that the semi-colon is used to separate patterns on all systems. The double semicolon at the start means &quot;append this to the existing Lua module path&quot; so Lua will first look in the system-wide directory for modules.</p
+    ><p
+    >So, there is nothing special about a Lua file loaded by <code
+      >require</code
+      >. Generally, it should create a table containing the functions. A common pattern looks like this:</p
+    ><pre
+    ><code
+      >-- mod3.lua
+local mod3 = {}
+
+function mod3.fun1()
+  return 42
+end
+
+function mod3.fun2()
+  return mod3.fun1()
+end
+
+return mod3
+</code
+      ></pre
+    ><p
+    >Note that it <em
+      >returns the table</em
+      >. A user of the module may now say:</p
+    ><pre
+    ><code
+      >local mod3 = require 'mod3'
+</code
+      ></pre
+    ><p
+    >This way of writing modules does not create a global table. Consider the effect of leaving out the <code
+      >local</code
+      > when declaring <code
+      >mod3</code
+      >: then the table <em
+      >is</em
+      > available globally. You can then use it like follows:</p
+    ><pre
+    ><code
+      >require 'mod3'
+print(mod3.fun1())
+</code
+      ></pre
+    ><p
+    >It's <em
+      >always</em
+      > a good idea to return the value of a module. If you do not, then <code
+      >require</code
+      > simply returns <code
+      >true</code
+      >, which is not very useful. Lua programmers expect <code
+      >require</code
+      > to return a table containing the functions.</p
+    ><p
+    >Please note that functions in a module may depend on each other, but they must reference them using the table explicitly.</p
+    ><p
+    >Using global tables of functions is going out of fashion in the Lua world, because it leads to the problems discussed in the section on variables and scope. Particularly in a big program, the aim is to keep the number of globals floating around to the absolute minimum.</p
+    ><p
+    >There is a common style introduced in Lua 5.1 for creating modules, which many libraries use. The <code
+      >module</code
+      > function creates a named table of functions and sets the environment of the file so that these functions may be declared and without explicit reference to the table:</p
+    ><pre
+    ><code
+      >-- mod4.lua
+module(&quot;mod4&quot;)
+
+function fun1()
+  return 42
+end
+
+function fun2()
+  return fun1()
+end
+</code
+      ></pre
+    ><p
+    >This has the same affect as <code
+      >mod3</code
+      > without the <code
+      >local</code
+      > declaration; <code
+      >require</code
+      > returns the table, and a global variable <code
+      >mod4</code
+      > is created which refers to the table.</p
+    ><p
+    >It is convenient that the module functions can call each other directly, but there is a tricky little issue:</p
+    ><pre
+    ><code
+      >-- mod5.lua
+module(&quot;mod5&quot;)
+
+function dump(msg)
+  print(msg)
+end
+</code
+      ></pre
+    ><p
+    >Calling <code
+      >mod5.dump</code
+      > leads to a run-time error:</p
+    ><pre
+    ><code
+      >.\mod5.lua:5: attempt to call global 'print' (a nil value)
+stack traceback:
+        .\mod5.lua:5: in function 'dump'
+...
+</code
+      ></pre
+    ><p
+    >This is because we are not inside the global environment, but inside the environment created by <code
+      >module</code
+      >. The recommended fix is to insert the following line <em
+      >before</em
+      > the call to <code
+      >module</code
+      >:</p
+    ><pre
+    ><code
+      >local print = print
+</code
+      ></pre
+    ><p
+    >The other fix is to make the module call look like this:</p
+    ><pre
+    ><code
+      >module(&quot;mod5&quot;,package.seeall)
+</code
+      ></pre
+    ><p
+    >This makes all the global functions available to the module. It's beter however to define what you need explicitly at the top of the module, since then readers can see at a glance what the dependencies are. (Last, but not least, using locals is significantly faster.)</p
+    ></div
+  ><div id="scope-of-variables"
+  ><h2
+    ><a href="#TOC"
+      >Scope of Variables</a
+      ></h2
+    ><p
+    >There are two kinds of variables in Lua, local and global. Globals are visible throughout the <em
+      >whole</em
+      > program, The standard functions in Lua are mostly contained in global tables, like <code
+      >math</code
+      > and <code
+      >table</code
+      >. An assignment like this:</p
+    ><pre
+    ><code
+      >newGlobal = 'hello'
+</code
+      ></pre
+    ><p
+    >causes <code
+      >newGlobal</code
+      > to be publically available - it is not just visible in the declared file.</p
+    ><p
+    >Global variables are contained in the global table. The variable <code
+      >_G</code
+      > refers to this table explicitly, so <code
+      >_G.print</code
+      > works as expected. But otherwise there is nothing special about <code
+      >_G</code
+      > and setting it to some other value has no effect on program operation.</p
+    ><p
+    >To understand global functions you need to remember how tables and functions work. It is easy to change the behavior of the whole program by redefining a global:</p
+    ><pre
+    ><code
+      >function print(x)
+    io.write(tostring(x),'\n')
+end
+</code
+      ></pre
+    ><p
+    >This is <em
+      >totally</em
+      > equivalent to the following table key assignment:</p
+    ><pre
+    ><code
+      >_G[&quot;print&quot;] = function(x) ... end
+</code
+      ></pre
+    ><p
+    >So you will not be surprised when this causes unexpected behavior - suddenly every call to <code
+      >print</code
+      > works differently (since the new version only takes one argument.) Sometimes this technique is useful and it has a name: &quot;monkey patching&quot;. But generally it is a disaster waiting to happen, because it messes with people's expectations of how a standard function works.</p
+    ><p
+    >Lua can not tell you that a function is undefined at compile-time. If you misspell a name <code
+      >newGlbal</code
+      > then it will just tell you that you have tried to call a <code
+      >nil</code
+      > value, because <code
+      >_G[&quot;newGlbal&quot;]</code
+      > is <code
+      >nil</code
+      >.</p
+    ><p
+    >Local variables, on the other hand, are only visible in the block where they have been declared.</p
+    ><p
+    >There are two places where local variables are implicitly declared; the first is the argument list of a function, and the second is the variables defined by a <code
+      >for</code
+      > statement. In this function, <code
+      >x</code
+      >,<code
+      >y</code
+      > and <code
+      >z</code
+      > are local because they are arguments, and <code
+      >k</code
+      >,<code
+      >v</code
+      > are locals because they are <code
+      >for</code
+      > variables.</p
+    ><pre
+    ><code
+      >function fun(x,y,z)
+    for k,v in pairs(x) do
+        ....
+    end -- B2
+    print(k)
+end -- B1
+</code
+      ></pre
+    ><p
+    >Local variables always have a 'scope', which is the the part of the program where they are valid and visible. In this function, <code
+      >x</code
+      > is visible up to the end of block B1 and <code
+      >k</code
+      > is visible up to the end of block B2. In particular, <code
+      >k</code
+      > is not visible in <code
+      >print(k)</code
+      >! And If a variable is undeclared, then Lua assumes it is global.</p
+    ><p
+    >The problem then is that a misspelling is <em
+      >not an error</em
+      > , just <code
+      >nil</code
+      > !</p
+    ><p
+    >Locals may be explicitly defined using the <code
+      >local</code
+      > keyword. This function makes a 'shallow copy' of a table by creating a new table and copying the key/value pairs:</p
+    ><pre
+    ><code
+      >function copy (t)
+    local res = {}
+    for k,v in pairs(t) do
+        res[k] = v
+    end
+    return res
+end
+</code
+      ></pre
+    ><p
+    ><code
+      >local</code
+      > is the correct way to do this, because then the variable <code
+      >res</code
+      > is not visible outside the function. The function is 'pure', i.e. it has no global side-effects.</p
+    ><p
+    >Local declarations can 'nest' inside each other. Inside the for-loop, <code
+      >k</code
+      > has a different meaning to <code
+      >k</code
+      > outside the loop.</p
+    ><pre
+    ><code
+      >function dumpv( t )
+    local k = 1
+    for k.v in pairs(t) do
+        print(k,v)
+    end
+    print(k) -- 1  !
+end
+</code
+      ></pre
+    ><p
+    >Good programming practice is to make everything as local as possible. As a bonus, accessing locals is significantly faster than accessing globals. Each global access involves a table lookup, whereas locals define 'slots' which are much more efficient.</p
+    ></div
+  ><div id="errors"
+  ><h2
+    ><a href="#TOC"
+      >Errors</a
+      ></h2
+    ><p
+    >Because Lua functions may return multiple values, they can return error strings together with the status code. The classic example is <code
+      >io,open</code
+      > which usually returns a file object, but will return both a <code
+      >nil</code
+      > and an error message if the file cannot be opened:</p
+    ><pre
+    ><code
+      >&gt; = io.open(&quot;hello.txt&quot;)
+nil hello.txt: No such file or directory    2
+</code
+      ></pre
+    ><p
+    >However, the Lua libraries aren't consistent in error handling. The <code
+      >table</code
+      > functions throw errors:</p
+    ><pre
+    ><code
+      >&gt; t = {'h',{}}
+&gt; = table.concat(t)
+stdin:1: invalid value (table) at index 2 in table for 'concat'
+stack traceback:
+    [C]: in function 'concat'
+    stdin:1: in main chunk
+</code
+      ></pre
+    ><p
+    >Even in the most careful programs, something will go wrong, and you do not want users to witness a crash with a stack traceback. Also, it is often possible to recover from the situation. Languages with exception handling encourage the 'throwing' or 'raising' of errors because then the error handling code is kept away from the 'normal' logic - what is sometimes called 'the happy path'.</p
+    ><p
+    >There is no <code
+      >try/except</code
+      > statement in Lua, but there is a function <code
+      >pcall</code
+      > (or 'protected call') which will call a Lua function safely. It will return the status and anything returned by the function. If the status is <code
+      >false</code
+      >, then the second return value is the error message.</p
+    ><pre
+    ><code
+      >&gt; = pcall(table.concat,t)
+false   invalid value (table) at index 2 in table for 'concat'
+&gt; = pcall(table.concat,{'one','two'})
+true    onetwo
+</code
+      ></pre
+    ><p
+    >Anonymous functions are useful for blocks that can raise errors:</p
+    ><pre
+    ><code
+      >local status,err = pcall(function()
+    do_something()
+    do_another()
+    and_again()
+end)
+if not status then
+    print('error',err)
+end
+</code
+      ></pre
+    ><p
+    >You can raise your own errors, using <code
+      >error</code
+      >. In its simplest form it will indicate that the error came from the current line:</p
+    ><pre
+    ><code
+      >--&gt; error is reported at this line; program will give a stacktrace
+if not right then error(&quot;was not right!&quot;) end
+</code
+      ></pre
+    ><p
+    >There can also be a second parameter that indicates where the error came from:</p
+    ><pre
+    ><code
+      >function not_right_error()
+  error(&quot;was not right&quot;,2) -- i.e, _calling_ function raised this
+end
+
+--&gt; error still reported at this line
+if not right then not_right_error() end
+</code
+      ></pre
+    ><p
+    >The function <code
+      >assert</code
+      > raises an error if a condition fails:</p
+    ><pre
+    ><code
+      >--&gt; message 'assertion failed....&quot;
+assert(n &gt; 0)
+--&gt; message &quot;size must be positive&quot;
+assert(n &gt; 0,&quot;size must be positive&quot;)
+</code
+      ></pre
+    ><p
+    >The equivalent Lua version looks like this:</p
+    ><pre
+    ><code
+      >function assert(value,message)
+    if not value then
+        if message == nil then message = &quot;assertion failed&quot; end
+        error(message,2)
+    else
+        return value
+    end
+end
+</code
+      ></pre
+    ><div id="metatables"
+    ><h3
+      ><a href="#TOC"
+	>Metatables</a
+	></h3
+      ><p
+      >Any table or userdata may have a <em
+	>metatable</em
+	> associated with it. Metatables specify the behaviour of their tables, in a similar way to how classes specify the behaviour of their objects in a traditional object-orientated language. Metatables do this by defining <em
+	>metamethods</em
+	>. In other respects, metatables are plain tables.</p
+      ><p
+      ><code
+	>tostring</code
+	> will try to convert a value into a string; it is used by <code
+	>print</code
+	> when presenting values. It is not particularly useful for tables,</p
+      ><pre
+      ><code
+	>obj = {label = &quot;hello&quot;}
+print(obj) --&gt; table: 0x80e91f8
+</code
+	></pre
+      ><p
+      ><code
+	>tostring</code
+	> does let an object decide how to show itself. If the object has a metatable, and that metatable contains a function called <code
+	>__tostring</code
+	>, it will use that function to get the string:</p
+      ><pre
+      ><code
+	>local MT = {
+    __tostring = function(obj)
+        return obj.label
+    end
+}
+
+setmetatable(obj,MT)
+
+print(obj) --&gt; hello
+</code
+	></pre
+      ><p
+      >A more realistic example involves making tables print out their contents. In the specialized case of an array or list, it would look like this:</p
+      ><pre
+      ><code
+	>List = {
+    __tostring = function(list)
+        local res = {}
+        for i = 1,#list do
+            res[i] = tostring(list[i])
+        end
+        return '{'..table.concat(res,',')..'}'
+    end
+}
+
+function new_list(t)
+    return setmetatable(t or {},List)
+end
+
+l1 = new_list{10,20,30}
+print(l2) ---&gt; {10,20,30}
+</code
+	></pre
+      ><p
+      >This is genuinely useful when working with lists. The <code
+	>__tostring</code
+	> implementation is a little more complicated than it should be, because <code
+	>table.concat</code
+	> itself does not use <code
+	>tostring</code
+	> and needs a table of strings or numbers. (This is actually deliberate, since <code
+	>table.concat</code
+	> is <em
+	>the</em
+	> way to build large strings for output in Lua. If you make a mistake and pass a table value or <code
+	>nil</code
+	>, then it is better for this to be a runtime error than to have to look through ten pages of output for the mistake.)</p
+      ><p
+      >The 'constructor' <code
+	>new_list</code
+	> takes an existing table, or makes a new table. (<code
+	>t or {}</code
+	> is a common Lua idiom for specifying a default value for the case when something may be <code
+	>nil</code
+	>.) It would be more elegant if <code
+	>List</code
+	> could be used as a constructor, like <code
+	>List{10,20,30}</code
+	>. The <code
+	>__call</code
+	> metamethod makes a table <em
+	>callable</em
+	>. When you try to 'call a table' then Lua looks for a function with this name in the metatable, passing the original table:</p
+      ><pre
+      ><code
+	>setmetatable(List,{
+    __call = function(C,t) return new_list(t) end
+})
+
+l2 = List{10,20,30}
+print(l1 == l2) --&gt; false
+</code
+	></pre
+      ><p
+      >It would be useful if lists could be compared element-by-element when using the equality operator <code
+	>==</code
+	>. By defining the metamethod <code
+	>__eq</code
+	>, the usual behaviour is <em
+	>overriden</em
+	>.</p
+      ><pre
+      ><code
+	>List.__eq = function(list1,list2)
+    if #list1 ~= #list2 then return false end
+    for i = 1,#list1 do
+        if list1[i] ~= list2[i] then return false end
+    end
+    return true
+end
+
+print(li1 == l2)   --&gt; true
+</code
+	></pre
+      ><p
+      ><code
+	>List</code
+	> is starting to resemble what people call a <em
+	>class</em
+	> in other languages; it serves both as a factory for making new <code
+	>List</code
+	> objects, and defines shared behaviour in all these objects.</p
+      ><p
+      >The basic table access operations using a key are getting and setting values. If a key is not found in the table, then <code
+	>nil</code
+	> is returned. Sometimes this is not an appropriate default value, or you want this case to really be an error. The <code
+	>__index</code
+	> metamethod is called if Lua <em
+	>cannot</em
+	> find a key in a table. It is passed the table and the key:</p
+      ><pre
+      ><code
+	>local ErrorMT = {}
+
+function ErrorMt.__index(t,key)
+    error(&quot;Cannot find '&quot;..key..&quot;' in table&quot;,2)
+end
+
+function new_strict_table(t)
+    return setmetatable(t or {},ErrorMT)
+end
+
+t = new_strict_table {fred = 1}
+--&gt; case-sensitive!  Throws an error &quot;Cannot find 'Fred' in table&quot;
+print(t.Fred)
+</code
+	></pre
+      ><p
+      >Consider counting unique words in a table:</p
+      ><pre
+      ><code
+	>for i = 1,#words do
+    local word = words[i]
+    local count = count_of[word]
+    if not count then
+        count_of[word] = 0
+    end
+    count_of[word] = count + 1
+end
+</code
+	></pre
+      ><p
+      >Having to check for the first occurance of a word is irritating; if the key is not found, the value should be zero.</p
+      ><pre
+      ><code
+	>ZeroMT = {
+    __index = function(t,key) return 0 end
+}
+</code
+	></pre
+      ><p
+      >Then tables with this metatable can be used like this:</p
+      ><pre
+      ><code
+	>for i,word = ipairs(words) do
+    count_of[word] = count_of[word] + 1
+end
+</code
+	></pre
+      ><p
+      >Going back to the <code
+	>List</code
+	> example, it would be nice if lists had some methods. The <code
+	>extend</code
+	> method will append all the elements of another table:</p
+      ><pre
+      ><code
+	>local methods = {}
+
+List.__index = function(list,k) -- *note*
+    return methods[k]
+end
+
+function methods.extend(self,list)
+    local k = #self
+    for i = 1,#list do
+        k = k + 1
+        self[k] = list[i]
+    end
+    return self
+end
+
+ls = List{10,20,30}
+ls:extend {40,50}
+print(ls) --&gt; {10,20,30,40,50}
+</code
+	></pre
+      ><p
+      >That is, if we can't find a key such as <code
+	>extend</code
+	> then <code
+	>__index</code
+	> assumes that it will be inside a table of methods.</p
+      ><p
+      >(This is such a common pattern that Lua allows <code
+	>__index</code
+	> to be a table, so you can write the marked line as:</p
+      ><pre
+      ><code
+	>List.__index = methods
+</code
+	></pre
+      ><p
+      >A little less flexible, but faster and cleaner.)</p
+      ><p
+      >It's easy to keep adding methods. For instance, this works like <code
+	>string.sub</code
+	>, where the second index can be negative to refer to the end of the list:</p
+      ><pre
+      ><code
+	>function methods.sub(self,i1,i2)
+    if i2 == nil then
+        i2 = #self
+    elseif i2 &lt; 0 then
+        i2 = #self + i2 + 1
+    end
+    local res = List()
+    for i = i1,i2 do
+        res[#res + 1] = self[i]
+    end
+    return res
+end
+
+print(ls:sub(1)) --&gt; {10,20,30,40,50}
+print(ls:sub(2,-2)) --&gt; {20,30,40}
+</code
+	></pre
+      ><p
+      >Such a section of a list is usually called a 'slice'. Note that calling with a start index of 1 gives us a copy of the full list.</p
+      ><p
+      >To make this list even more Python-like, we can implement <em
+	>concatenation</em
+	>. This is the new list made from appending the second list to the first list. <code
+	>l1 .. l2</code
+	> can be made to do this if the <code
+	>__concat</code
+	> metamethod is defined:</p
+      ><pre
+      ><code
+	>List.__concat = function(l1,l2)
+    local res = self:sub(1)  --- make a copy
+    return res:extend(l2)    --- and append l2
+end
+
+print(List{10,20} .. List{30,40} .. List{50}) --&gt; {10,20,30,40,50}
+</code
+	></pre
+      ><p
+      >To recap: the behaviour of any table can be changed by giving it a <em
+	>metatable</em
+	>, which contains <em
+	>metamethods</em
+	>. The most important of these is <code
+	>__index</code
+	> which allows you to handle the case where a key is not found in the table. It may simply point to a table which is used as the 'fallback' table which is examined after the first lookup fails. This is a common way to implement object-oriented programming in Lua, allowing the methods for all objects of a given 'class' to be stored in one place.</p
+      ><p
+      >You could define <code
+	>l1 + l2</code
+	> to mean this using the metamethod <code
+	>__add</code
+	>, but Lua programmers would not expect addition to work like that. They would expect that <code
+	>l1 + l2</code
+	> is the list made by adding the corresponding elements of the two lists ('element-wise'), and it would of course only work with lists where the elements <em
+	>could</em
+	> be added.</p
+      ><p
+      >The operation of setting a value can also be customized. <code
+	>__newindex</code
+	> works like <code
+	>_index</code
+	>; it is <em
+	>only</em
+	> called if the key is not in the table. It receives three arguments, the table itself, the key and the new value.</p
+      ><p
+      >What if you want <code
+	>__index</code
+	> and <code
+	>__newindex</code
+	> to be <em
+	>always</em
+	> called? Then the keys by definition cannot be in the table itself. Instead, the table must act as a <em
+	>proxy</em
+	> for another table. Say we have an array and want to raise a 'out of bounds' error instead of just silently returning <code
+	>nil</code
+	>.</p
+      ><pre
+      ><code
+	>local ProxyListMT = {}
+
+function new_array(arr)
+    return setmetatable({_data = arr},ProxyListMT)
+end
+
+function ProxyListMT.__index(self,k)
+    if k &lt; 1 or k &gt; #self._data then error(&quot;out of bounds&quot;,2) end
+    return self._data[k]
+end
+
+function ProxyListMT.__newindex(self,k,value)
+    if k &lt; 1 or k &gt; #self._data then error(&quot;out of bounds&quot;,2) end
+    self._data[k] = value
+end
+</code
+	></pre
+      ><p
+      >That is, the object just contains a <code
+	>_data</code
+	> field which refers to the actual table; any time we access an array element, it must go through <code
+	>__index</code
+	> because there are no array elements in the object itself; it is acting as a proxy for the table. The object behaves like a non-resizable array. It is naturally not quite as efficient, but it is often more important to be <em
+	>correct</em
+	> than <em
+	>fast</em
+	>.</p
+      ></div
+    ></div
+  ></div
+><div class="footnotes"
+><hr
+   /><ol
+  ><li id="fn1"
+    ><p
+      >a-z <a href="#fnref1" class="footnoteBackLink" title="Jump back to footnote 1">↩</a></p
+      ></li
+    ></ol
+  ></div
+>
