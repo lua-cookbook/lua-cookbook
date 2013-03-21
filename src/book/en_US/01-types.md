@@ -39,7 +39,7 @@ Lua has only one type of number, which is usually double-precision floating-poin
 desktop machines. This means you do not usually have to worry about integers and
 floats;  this is one of the simplifications which makes Lua so small and fast. If
 you worry about storing integers as double-precision floats, remember that integers
-can be _exactly_ represented up to about 1e16.
+can be _exactly_ represented up to about 1e52.
 
 There are two rounding functions, `math.floor` and `math.ceil`; so given 3.1, the
 first gives the integer part (3), and the second gives the first integer that is
@@ -49,7 +49,7 @@ larger (4). `math.ceil(x)==x` is only true if `x` is an integer.
         return math.ceil(x) == x
     end
 
-0 does not fail a condition, unlike C or Python.
+0 does not evaluate as false, unlike C or Python.
 
 ### Strings
 
@@ -64,7 +64,7 @@ useful if you wish to quote a string inside a string:
 
 The best advice is: be consistent in your quoting.
 
-Strings compare as you would expect using the locale, so that `s1==s2` behaves
+Strings compare as you would expect, using the locale, so that `s1==s2` behaves
 sensibly, unlike in Java. In Lua, identical strings are _identical_ objects.
 
 There are cases where strings will be automatically considered to be numbers. For
@@ -74,7 +74,12 @@ on a string value". It isn't a good idea to depend on this default behaviour,
 because your program will crash on bad input.
 
 The length operator `#` returns the number of bytes in a string, which is not
-necessarily the number of characters.
+necessarily the number of characters. You may read UTF-8 text into a string, but then
+anything that isn't plain ASCII will occupy at least two bytes.
+
+!ref:utf8'
+Later we will discuss how to handle UTF-8 correctly.
+
 
 ### Tables
 
@@ -82,12 +87,16 @@ Lua tables are _associative arrays_; indexing a table is giving it a _key_ and g
 Any Lua value can be stored in a table, except for `nil`.
 
 They are very efficient at _behaving_ like arrays, that is, consecutive integer keys starting
-at one.  The length operator `#` only gives the number of these keys, not the total
+at one.  The length operator `#` only gives the number of these integer keys, not the total
 number of keys.
 
 ### Functions
 
-In Lua, functions are _first-class values_ - that is, they can be passed around like any other value.
+In Lua, functions are _first-class values_ - that is, they can be passed around like
+any other value. Writing out a function as an explicit assignment makes this clearer:
+
+    sqr = function(x) return x^2 end
+
 
 ### Coroutines
 

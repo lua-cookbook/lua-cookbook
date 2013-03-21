@@ -29,7 +29,8 @@ try to treat them as numbers. To join strings together (_concatenate_) there is 
     "1".."2" == "12"
 
 Most languages use `+` to mean this, so note the difference. Using a different
-operator makes it clear, for instance, that `1 .. 2` results in the _string_ '12'.
+operator makes it clear that `1 .. 2` results in the _string_ "12" and not
+the _number_ `3`
 
 As with arrays, `#s` is the length of the string `s`. (This is the number of _bytes_, not the
 number of characters.)
@@ -77,7 +78,6 @@ string pattern 'l+' means 'one or more' repetitions of 'l'.
 
     print(string.find('hello','l+'))
     --> 3       4
-
 
 'Character classes' make string patterns much more powerful. The pattern '[a-z]+'
 means 'one or more letter in the range 'a' to 'z':

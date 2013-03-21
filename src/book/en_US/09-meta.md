@@ -5,7 +5,6 @@ the behaviour of their tables, in a similar way to how classes specify the behav
 their objects in a traditional object-orientated language.  Metatables do this by defining
 _metamethods_.  In other respects, metatables are plain tables.
 
-
 `tostring` will try to convert a value into a string; it is used by `print` when presenting
 values. It is not particularly useful for tables,
 
@@ -16,11 +15,11 @@ values. It is not particularly useful for tables,
 and that metatable contains a function called `__tostring`, it will use that function to
 get the string:
 
-    local MT = {
-        __tostring = function(obj)
-            return obj.label
-        end
-    }
+    local MT = {}
+
+    MT.__tostring = function(obj)
+        return obj.label
+    end
 
     setmetatable(obj,MT)
 
@@ -29,15 +28,14 @@ get the string:
 A more realistic example involves making tables print out their contents.  In the
 specialized case of an array or list, it would look like this:
 
-    List = {
-        __tostring = function(list)
-            local res = {}
-            for i = 1,#list do
-                res[i] = tostring(list[i])
-            end
-            return '{'..table.concat(res,',')..'}'
+    List = {}
+    List.__tostring = function(list)
+        local res = {}
+        for i = 1,#list do
+            res[i] = tostring(list[i])
         end
-    }
+        return '{'..table.concat(res,',')..'}'
+    end
 
     function new_list(t)
         return setmetatable(t or {},List)
@@ -65,7 +63,7 @@ the original table:
     })
 
     l2 = List{10,20,30}
-    print(l1 == l2) --> false
+    print(l2) --> {10,20,30}
 
 It would be useful if lists could be compared element-by-element when using the
 equality operator `==`.  By defining the metamethod `__eq`, the usual behaviour
@@ -206,11 +204,15 @@ by adding the corresponding elements of the two lists ('element-wise'), and it w
 of course only work with lists where the elements _could_ be added.
 
 The operation of setting a value can also be customized.  `__newindex` works like
-`_index`; it is _only_ called if the key is not in the table. It receives three arguments, the table
-itself, the key and the new value.
+`_index`; it is _only_ called if the key is not in the table. It receives three arguments,
+the table itself, the key and the new value.
 
 What if you want `__index` and `__newindex` to be _always_ called? Then the keys by definition
-cannot be in the table itself.  Instead, the table must act as a _proxy_ for another table. Say we
+cannot be in the table itself; this is the important point about these metamethods - they only
+fire if the key does _not_ already exist in the table. (Earlier in the history of Lua these functions
+were called _fallbacks_ for this reason.)
+
+Instead, the table must act as a _proxy_ for another table. Say we
 have an array and want to raise a 'out of bounds' error instead of just silently returning `nil`.
 
     local ProxyListMT = {}
@@ -233,5 +235,5 @@ That is, the object just contains a `_data` field which refers to the actual tab
 access an array element, it must go through `__index` because there are no array elements
 in the object itself; it is acting as a proxy for the table.  The object behaves like a
 non-resizable array.  It is naturally not quite as efficient, but it is often more important
-to be _correct_ than _fast_.
+to be _correct_ than to be _fast_.
 

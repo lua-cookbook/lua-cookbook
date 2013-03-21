@@ -29,7 +29,7 @@ Sometimes this technique is useful and it has a name: "monkey patching". But
 generally it is a disaster waiting to happen, because it messes with people's
 expectations of how a standard function works.
 
-Lua can not tell you that a function is undefined at compile-time. If you misspell a name
+Lua cannot tell you that a function is undefined at compile-time. If you misspell a name
 `newGlbal` then it will just tell you that you have tried to call a `nil` value, because
 `_G["newGlbal"]` is `nil`.
 
@@ -53,6 +53,8 @@ they are valid and visible.  In this function, `x` is visible up to the end of b
 B1 and `k` is visible up to the end of block B2. In particular, `k` is not visible in
 `print(k)`! And If a variable is undeclared, then Lua assumes it is global.
 
+!where?!
+
 The problem then is that a misspelling is _not an error_ , just `nil` !
 
 Locals may be explicitly defined using the `local` keyword. This function makes a
@@ -67,7 +69,7 @@ Locals may be explicitly defined using the `local` keyword. This function makes 
     end
 
 `local` is the correct way to do this, because then the variable `res` is not visible
-outside the function.  The function is 'pure', i.e. it has no global side-effects.
+outside the function.  The function is then _pure_, i.e. it has no global side-effects.
 
 Local declarations can 'nest' inside each other. Inside the for-loop, `k` has a different
 meaning to `k` outside the loop.
@@ -77,7 +79,7 @@ meaning to `k` outside the loop.
         for k.v in pairs(t) do
             print(k,v)
         end
-        print(k) -- 1  !
+        print('hello',k) --> hello   1  !
     end
 
 Good programming practice is to make everything as local as possible.  As a bonus,

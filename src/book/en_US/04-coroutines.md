@@ -75,7 +75,7 @@ This kind of structure is often called a _tree_, in this case a binary tree beca
 there are at most two branches at each note. The end nodes are often called
 _leaves_ because they have no branches.
 
-A recursive function for printing all the values s easy to write
+A recursive function for printing all the values is easy to write
 
     function traverse(t)
         if t.left then traverse(t.left) end
@@ -128,3 +128,5 @@ coroutine:
 `tree_iter` returns the iterator.
 Each time it is called, the coroutine yields, returning the value of
 the node. We keep yielding until the function finishes, when it returns `nil`.
+
+!feels a little difficult, not so?!

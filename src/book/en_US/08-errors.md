@@ -8,7 +8,7 @@ cannot be opened:
     > = io.open("hello.txt")
     nil	hello.txt: No such file or directory	2
 
-However, the Lua libraries aren't consistent in error handling. The `table` functions
+However, the Lua libraries aren't always consistent in error handling. The `table` functions
 throw errors:
 
     > t = {'h',{}}
@@ -55,20 +55,20 @@ that the error came from the current line:
 There can also be a second parameter that indicates where the error came from:
 
     function not_right_error()
-      error("was not right",2) -- i.e, _calling_ function raised this
+        error("was not right",2) -- i.e, _calling_ function raised this
     end
 
     --> error still reported at this line
     if not right then not_right_error() end
 
-The function `assert` raises an error if a condition fails:
+The function `assert` raises an error if a condition fails; it may be given an optional message.
 
     --> message 'assertion failed...."
     assert(n > 0)
     --> message "size must be positive"
     assert(n > 0,"size must be positive")
 
-The equivalent Lua version looks like this:
+An equivalent Lua version looks like this:
 
     function assert(value,message)
         if not value then

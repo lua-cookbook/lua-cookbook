@@ -7,7 +7,10 @@ and can highlight it appropriately. This is not just because it's more attractiv
 but such an editor can immediately show you common mistakes like forgetting the
 closing quote on a string.  Such editors can also match up parentheses and braces.
 They will often automatically _indent_ code for you, which is important for
-readability..
+readability.  Lua support is common these days; [SciTE](?) is a good example of
+a straightforward yet powerful editor, and [ZeroBrane Studio](?) is a full IDE
+providing debugger support. See the [Lua wiki](http://lua-users.org/wiki/LuaEditorSupport)
+for more options.
 
 It is better to lay out code like this:
 
@@ -32,10 +35,6 @@ The logical structure of the code is now harder to see. By making indenting a ha
 you will write code that will be more readable to another person. (After several
 months, you will be that other person.)
 
-A good start is the Lua [wiki](http://lua-users.org/wiki/LuaEditorSupport). If you
-are on Windows, then the Lua for WIndows distribution comes with SciTE, which also
-has Lua debugging support.
-
 ## Basics
 
 ### Expressions
@@ -55,7 +54,7 @@ To run this example, save this line as 'hello.lua' and run from the command line
     Hello world!
 
 (Or, use an editor that knows how to run Lua, like SciTE in Lua for Windows. The F5 key
-will run the current program.)
+will run the current program; it is F6 in ZBStudio)
 
 Arithmetic expressions use standard programming notation:
 
@@ -91,10 +90,11 @@ This is more readable when spread over two lines using a _variable_ `x`:
     x = 0.5*math.pi
     print('sin',math.sin(x),'cos',math.sin(x))
 
-Of course, you could say that `x` is not a variable, but Lua does not make any
-distinction between variables and named constants.
+(Of course, `x` is not a variable in this case, but Lua does not make any
+distinction between variables and named constants.)
 
 Even if the command-line is not your strong point, I recommend learning Lua interactively.
+!5.1.5!
 
     $> lua
     Lua 5.1.4  Copyright (C) 1994-2008 Lua.org, PUC-Rio
@@ -108,9 +108,10 @@ Even if the command-line is not your strong point, I recommend learning Lua inte
     > = math.cos(p)
     -1
 
-Starting a line with `=` is a shortcut for `print()`.  Interactive Lua is a very
+Starting a line with `=` is a shortcut for `return ...`.  Interactive Lua is a very
 useful scientific calculator !
 
+!LfW!
 With Lua for Windows, it is not even necessary to open a command prompt. On the
 SciTE toolbar, there is a prompt icon with the tooltip 'Launch Interactive Lua'. It will open
 an interactive session in the output pane, and you can evaluate Lua statements. As with
@@ -148,7 +149,8 @@ other languages. It is possible to swap the values of two variables in one line:
 
     x, y = y, x
 
-The _assignment_ statement `x = 1` is not an expression - it does not return a value.
+The _assignment_ statement `x = 1` is not an expression - it does not return a value as in C
+or Java.
 
 ### Numeric `for` loops
 
@@ -189,13 +191,14 @@ greetings out backwards:
 
     for i = 5, 1, -1 do print("hello",  i) end
 
-So to print a little table of sine values from 0 to &pi; with steps of 0.1:
+So to print a little table of sine values from 0 to `pi`; with steps of 0.1:
 
     for x = 0, math.pi, 0.1 do
         print(x, math.sin(x))
     end
 
-@ note [
+**note**
+
 There is something you need to know about `for` variables; they only exist inside
 the block.
 
@@ -204,7 +207,6 @@ the block.
 
 You might expect that the last value printed would be 11, but the last `print` will
 show just `nil`; `i` is _not defined_ outside the loop.
-]
 
 ### Conditions
 
@@ -229,7 +231,7 @@ It is common to have two different actions based on the condition:
     if age > 30 then
         print("still too old")
     else
-        print("hello, kiddy!")
+        print("hello, kiddie!")
     end
 
 And there may be multiple choices:
@@ -363,8 +365,8 @@ So to print out this array:
 
     for i = 1, #arr do print(arr[i]) end
 
-Arrays start with index 1; it's best to accept this and learn to live with the
-fact.
+(Arrays start with index 1; it's best to accept this and learn to live with the
+fact; this corresponds with common mathematical notation anyway)
 
 These arrays are resizable; we can add new elements:
 
@@ -392,17 +394,19 @@ To complete the picture, there is `table.remove` which removes a value at a give
 index.
 
 The function `table.sort` will sort an array of numbers in ascending order.
+!ex!
 
 Lua tables can contain any valid Lua value:
 
     t = {10,'hello',{1,2}}
 
-So `t[1]` is a number, `t[2]` is a string, and `t[3]` is itself another table. (But do not
-expect `table.sort` to know what to do with `t` !)
+So `t[1]` is a number, `t[2]` is a string, and `t[3]` is itself another table. But do not
+expect `table.sort` to know what to do with `t`; by default it only sorts arrays that contain numbers
+or strings. Later we will see how to do a general sort.
 
 What about trying to access an element that does not exist, e.g. `arr[20]`? It
 will not raise an error, but return the value `nil`.  So it is wise to carefully
-check what is returned from an arbitrary tab;e access.  Since `nil` always indicates
+check what is returned from an arbitrary table access.  Since `nil` always indicates
 'not found', it follows that you should not put `nil` into an array.  Consider:
 
     arr = {1,2,nil,3,4}
@@ -417,8 +421,10 @@ The same caution applies to creating arrays that start at 0.
     for i = 0,9 do arr[i] = i end
 
 Well, `arr[0]` will be 0, and `arr[9]` will be 9, as expected. But `#arr` will be 9, not 10.
-And `table.sort` will only operate on indexes between 1 and 9.  (So yes, it is possible
-to arrange arrays from 0, but the standard table functions will not work as expected.)
+And `table.sort` will only operate on indexes between 1 and 9.
+
+So yes, it _is_ possible
+to arrange arrays from 0, but the standard table functions will not work as expected.
 
 It is possible to compare tables for equality, as we did above:
 
@@ -426,8 +432,8 @@ It is possible to compare tables for equality, as we did above:
     a2 = {10,20}
     print(a1 == a2) --> false !
 
-The result is `false` because `a1` and `a2` are different _objects_. Table
-comparison does not compare the elements, it just checks whether the arguments are
+The result is `false` because `a1` and `a2` are different _objects_. The Lua
+comparison operator does not compare the elements, it just checks whether the arguments are
 in fact the same tables.
 
     a1 = {10,20}
@@ -442,7 +448,7 @@ Newcomers to Lua are often surprised by the lack of 'obvious' functionality, lik
 how to compare arrays 'properly' or how to print out an array. It helps to think of
 Lua as 'the C of dynamic languages' - lean and mean. It gives you a powerful core
 and you either build what you need, or reuse what others have provided, just as with
-C.  The whole purpose of the Lua cookbook is to provide good solutions so you do
+C.  The whole purpose of this cookbook is to provide good solutions so you do
 not have to reinvent the wheel.
 
 There is another use of Lua tables, constructing 'dictionaries' or 'maps'.  Generally a
@@ -514,5 +520,5 @@ standard function `io.write` writes out text without a line feed:
     10,20,30
 
 True to its name, most of this Cookbook is dedicated to giving you functions to do
-useful things.
+useful things, or pointing you to existing solutions packaged as easily available modules.
 

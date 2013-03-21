@@ -104,10 +104,16 @@ program.  It is better to put these into their own table:
     mod2.answer = function()
         return 42
     end
+    -- usemod2.lua
+    require("mod2")
+    print(mod2.answer())
+    -->
+    42
 
 Now, after `require("mod2")` our code can call `mod2.answer()`. There can now be
 a number of functions called `answer` in the program and they will not interfere
-with each other.
+with each other. Note how simple this system is; there is no separate data type for modules,
+they are _just tables_.
 
 If you move `mod2.lua` to a location on your Lua path (such as
  '/usr/local/share/lua/5.1/') then a Lua program anywhere on the system can load
@@ -219,3 +225,6 @@ This makes all the global functions available to the module. It's beter however
 to define what you need explicitly at the top of the module, since then readers
 can see at a glance what the dependencies are. (Last, but not least, using locals
 is significantly faster.)
+
+Generally, we would advise you to use the 'no magic' style used in `mod3.lua`; no globals are
+harmed, and such code will work perfectly on Lua 5.1, 5.2 and LuaJIT.

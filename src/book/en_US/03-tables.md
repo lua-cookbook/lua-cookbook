@@ -6,11 +6,14 @@ It is more correct to say that it can be used both ways.
 Here is a more general table - note that the length operator `#` does not see any
 non-array keys:
 
-    T = {10,20,30,40,50; sorted=true}
+    t = {10,20,30,40,50; sorted=true}
     print(t [1], #t, t [#t])  --> 10    5    50
     print(t["sorted"],  t.sorted) --> true     true
 
-In Lua, `M.one` is _defined_ to be `M['one']`.  This gives us a way to do
+In Lua, `t.sorted` is _defined_ to be `t['sorted']`. (This is one of several simularities Lua
+has with JavaScript.)
+
+This gives us a way to do
 'objects' or 'structures' with tables:
 
     -- 'point' objects
@@ -21,7 +24,7 @@ In Lua, `M.one` is _defined_ to be `M['one']`.  This gives us a way to do
     print(sum.x, sum.y) --> 1    6
 
 Something like `t.function` is a syntax error, because `function` is a keyword. In this case
-you must say `t["function"]`. The general way to construct such table is
+you must say `t["function"]`. The general way to construct tables is
 
     t = {
       ["function"] = 1,
